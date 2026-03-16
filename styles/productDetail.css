@@ -195,6 +195,29 @@
   color: var(--text);
 }
 
+/* Discount Price Styling */
+.product-detail__price--discount {
+  gap: 8px;
+}
+
+.product-detail__price-values {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.product-detail__price-original {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.product-detail__price--discount .product-detail__price-value {
+  font-size: 32px;
+  color: #e74c3c;
+}
+
 /* ============================================================
    RESPONSIVE — Tablet ≤ 800px
    ============================================================ */
