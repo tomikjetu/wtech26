@@ -98,6 +98,15 @@
               </div>
             </div>
 
+            <div class="product-detail__quantity">
+              <label class="product-detail__sizes-label">Množstvo</label>
+              <div class="cart-item__quantity">
+                <button class="quantity-btn" aria-label="Decrease">-</button>
+                <span class="quantity-value">1</span>
+                <button class="quantity-btn" aria-label="Increase">+</button>
+              </div>
+            </div>
+
             <div class="product-detail__footer">
               <div class="product-detail__price">
                 <span class="product-detail__price-label">Cena</span>
@@ -165,49 +174,48 @@
   <!-- ===== FOOTER ===== -->
   <footer class="footer">
     <div class="container footer__inner">
-      <div class="footer__section">
-        <h3 class="footer__title">Zásady používania</h3>
-        <ul class="footer__links">
-          <li><a href="#" class="footer__link">Cookies</a></li>
-          <li><a href="#" class="footer__link">Terms & Conditions</a></li>
-          <li><a href="#" class="footer__link">Privacy Policy</a></li>
-        </ul>
+      <div class="footer__logo">
+        <a href="/" class="footer__logo-link">trickohouse</a>
       </div>
 
-      <div class="footer__section">
-        <h3 class="footer__title">Sociálne siete</h3>
-        <div class="footer__social">
-          <a href="#" class="social-icon" aria-label="Instagram">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
-          </a>
-          <a href="#" class="social-icon" aria-label="Facebook">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a6 6 0 0 0-6 6v4h-2v4h2v6h4v-6h3l1-4h-4V8a1 1 0 0 1 1-1h3z"/></svg>
+      <div class="footer__cols">
+        <div class="footer__col">
+          <h3>Zásady používania</h3>
+          <ul>
+            <li><a href="#">Cookies</a></li>
+            <li><a href="#">Terms &amp; Conditions</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h3>Sociálne siete</h3>
+          <div class="footer__socials">
+            <a href="#" aria-label="Instagram">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="#" aria-label="Facebook">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="footer__col">
+          <h3>Kontakty</h3>
+          <a href="mailto:tricka@trickohouse.sk" class="footer__email">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            tricka@trickohouse.sk
           </a>
         </div>
       </div>
 
-      <div class="footer__section">
-        <h3 class="footer__title">Kontakty</h3>
-        <a href="mailto:tricka@trickohouse.sk" class="footer__link">tricka@trickohouse.sk</a>
+      <div class="footer__bottom">
+        <p>Trickohouse WTECH 2026</p>
       </div>
-    </div>
 
-    <div class="footer__bottom">
-      <p class="footer__copyright">Trickohouse WTECH 2026</p>
     </div>
   </footer>
 
-  <script>
-    document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
-      const carousel = wrapper.querySelector('.products-carousel');
-      wrapper.querySelector('.carousel-btn--next').addEventListener('click', () => {
-        carousel.scrollBy({ left: 220, behavior: 'smooth' });
-      });
-      wrapper.querySelector('.carousel-btn--prev').addEventListener('click', () => {
-        carousel.scrollBy({ left: -220, behavior: 'smooth' });
-      });
-    });
-  </script>
+  <script src="scripts/carousel.js"></script>
+
   <script src="assets/nav.js" defer></script>
 </body>
 </html>
