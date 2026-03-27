@@ -503,6 +503,7 @@
    ============================================================ */
 .order-confirmation {
   background: var(--white);
+  
 }
 
 .order-confirmation__inner {
@@ -546,8 +547,15 @@
   color: var(--text);
 }
 
-.order-details {
+.order-confirmation__actions {
+  text-align: center;
   padding: 32px 0;
+}
+
+.order-details{
+  margin: 32px auto;
+  max-width: 700px;
+  padding: 20px;
 }
 
 .order-details__title {
@@ -561,7 +569,6 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-bottom: 32px;
 }
 
 .order-item {
@@ -643,14 +650,14 @@
   margin-top: 8px;
 }
 
-.order-summary {
+.order-summary-box {
   background: #f9f9f9;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 16px;
 }
 
-.order-summary__row {
+.order-summary-box__row {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -659,7 +666,7 @@
   color: var(--text);
 }
 
-.order-summary__row--total {
+.order-summary-box__row--total {
   border-top: 1px solid var(--border);
   padding-top: 10px;
   margin-top: 8px;
