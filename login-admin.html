@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini Login - trickohouse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles/style.css" />
+  <link rel="stylesheet" href="styles/admin-header.css" />
+  <link rel="stylesheet" href="styles/login-small.css" />
+</head>
+<body class="mini-login-page">
+  <header class="admin-header-header">
+    <div class="container admin-header-header__inner">
+      <a href="index.html" class="admin-header-logo">trickohouse admin</a>
+      <nav class="admin-header-nav" aria-label="Admin navigation">
+        <a href="products.html" class="admin-header-link">Obchod</a>
+        <a href="login-admin.html" class="admin-header-link admin-header-link--active" aria-current="page">Admin</a>
+        <a href="admin-products.html" class="admin-header-link">Produkty</a>
+        <a href="#" class="admin-header-link">Objednavky</a>
+        <a href="#" class="admin-header-link">Pouzivatelia</a>
+      </nav>
+      <div class="admin-header-user">Spravca</div>
+    </div>
+  </header>
+
+  <main class="mini-login-wrap" aria-labelledby="mini-login-title">
+    <section class="mini-login-card">
+      <h1 id="mini-login-title" class="mini-login-title">Prihlasenie</h1>
+      <form class="mini-login-form" action="#" method="post">
+        <label class="mini-login-label" for="mini-username">Username</label>
+        <input id="mini-username" name="username" type="text" class="mini-login-input" required />
+
+        <label class="mini-login-label" for="mini-password">Password</label>
+        <input id="mini-password" name="password" type="password" class="mini-login-input" required />
+
+        <button type="submit" class="mini-login-btn">Login</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="admin-header-footer">
+    <div class="container admin-header-footer__inner">
+      <div class="admin-header-footer__links">
+        <a href="products.html">Obchod</a>
+        <a href="admin-products.html">Produkty</a>
+        <a href="#">Objednavky</a>
+        <a href="#">Nastavenia</a>
+      </div>
+      <p class="admin-header-footer__copy">Admin Panel WTECH 2026</p>
+    </div>
+  </footer>
+</body>
+</html>
+
