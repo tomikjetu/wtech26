@@ -15,40 +15,31 @@
   <header class="admin-header-header">
     <div class="container admin-header-header__inner">
       <a href="index.html" class="admin-header-logo">trickohouse admin</a>
-      <nav class="admin-header-nav" aria-label="Admin navigation">
-        <a href="products.html" class="admin-header-link">Obchod</a>
-        <a href="login-admin.html" class="admin-header-link admin-header-link--active" aria-current="page">Admin</a>
-        <a href="admin-products.html" class="admin-header-link">Produkty</a>
-        <a href="#" class="admin-header-link">Objednavky</a>
-        <a href="#" class="admin-header-link">Pouzivatelia</a>
-      </nav>
-      <div class="admin-header-user">Spravca</div>
     </div>
   </header>
 
   <main class="mini-login-wrap" aria-labelledby="mini-login-title">
     <section class="mini-login-card">
       <h1 id="mini-login-title" class="mini-login-title">Prihlasenie</h1>
-      <form class="mini-login-form" action="#" method="post">
-        <label class="mini-login-label" for="mini-username">Username</label>
-        <input id="mini-username" name="username" type="text" class="mini-login-input" required />
+      <form class="mini-login-form" id="adminLoginForm">
+        <label class="mini-login-label" for="mini-username">Email</label>
+        <input id="mini-username" name="email" type="email" class="mini-login-input" placeholder="admin@trickohouse.sk" required />
 
-        <label class="mini-login-label" for="mini-password">Password</label>
-        <input id="mini-password" name="password" type="password" class="mini-login-input" required />
+        <label class="mini-login-label" for="mini-password">Heslo</label>
+        <input id="mini-password" name="password" type="password" class="mini-login-input" placeholder="••••••" required />
 
-        <button type="submit" class="mini-login-btn">Login</button>
+        <div id="loginError" class="login-error" style="display:none; color:#ff3b30; font-size:12px; margin-bottom:10px;"></div>
+        <button type="submit" class="mini-login-btn">
+          <a href="admin-products.html">Prihlásenie
+          </a>
+          </button>
+      
       </form>
     </section>
   </main>
 
   <footer class="admin-header-footer">
     <div class="container admin-header-footer__inner">
-      <div class="admin-header-footer__links">
-        <a href="products.html">Obchod</a>
-        <a href="admin-products.html">Produkty</a>
-        <a href="#">Objednavky</a>
-        <a href="#">Nastavenia</a>
-      </div>
       <p class="admin-header-footer__copy">Admin Panel WTECH 2026</p>
     </div>
   </footer>
