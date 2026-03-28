@@ -206,6 +206,68 @@
   opacity: 0.5;
 }
 
+/* Category styles */
+.admin-category-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.admin-category-option {
+  display: none;
+}
+
+.admin-category-label {
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.7);
+  font: 700 12px var(--font-body, sans-serif);
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  user-select: none;
+}
+
+.admin-category-option:checked + .admin-category-label {
+  border-color: #00c2b2;
+  background: rgba(0, 194, 178, 0.15);
+  color: #00c2b2;
+}
+
+.admin-category-label:hover {
+  border-color: rgba(0, 194, 178, 0.5);
+  color: #ffffff;
+}
+
+.admin-category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.admin-category-header a {
+  color: #00c2b2;
+  font-size: 12px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.admin-category-header a:hover {
+  text-decoration: underline;
+}
+
+/* Modal display state */
+.admin-modal--visible {
+  display: flex !important;
+}
+
 /* Modal styles */
 .admin-modal {
   display: flex;

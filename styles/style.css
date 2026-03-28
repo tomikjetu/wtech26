@@ -871,3 +871,11 @@ img {
     flex: 0 0 130px;
   }
 }
+
+/* Utility classes */
+.products-filters-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}

@@ -47,7 +47,6 @@ LISTING HEADER — full-width bar spanning sidebar + grid
 .listing-header__search input {
   color: var(--white) !important;
   background: transparent !important;
-  width: 180px;
 }
 
 .listing-header__search input::placeholder {
@@ -188,9 +187,8 @@ RESPONSIVE — Tablet ≤ 800px
   .products-listing {
     grid-template-columns: repeat(2, 1fr);
   }
-
-  .listing-header__search input {
-    width: 130px;
+  .listing-header{
+    flex-direction: column;
   }
 }
 
@@ -212,10 +210,6 @@ RESPONSIVE — Mobile ≤ 600px
 
   .filter-group {
     flex: 1 1 120px;
-  }
-
-  .listing-header__search input {
-    width: 110px;
   }
 
   .products-listing {

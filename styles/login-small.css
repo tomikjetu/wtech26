@@ -82,3 +82,13 @@
 .mini-login-btn:hover {
   background: #00a99a;
 }
+
+.login-error {
+  color: #ff3b30;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.login-error--hidden {
+  display: none;
+}
