@@ -436,6 +436,27 @@ img {
   flex-shrink: 0;
 }
 
+.sort-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sort-control label {
+  font-size: 13px;
+  color: #666;
+  white-space: nowrap;
+}
+
+.sort-control select {
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+}
+
 /* Temporary - nahradit ked bude databaza - mat to krajsie pomenovane */
 
 .category-card__img--muzi {
