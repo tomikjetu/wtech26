@@ -48,6 +48,24 @@
       border-color: rgba(0, 194, 178, 0.5);
       color: #ffffff;
     }
+
+    .admin-category-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .admin-category-header a {
+      color: #00c2b2;
+      font-size: 12px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .admin-category-header a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body class="admin-page">
@@ -90,7 +108,10 @@
 
           <!-- Category picker -->
           <div class="admin-form-group">
-            <label>Kategória *</label>
+            <div class="admin-category-header">
+              <label>Kategória *</label>
+              <a href="admin-categories.html">Správa kategórií</a>
+            </div>
             <div class="admin-category-grid">
               <input type="radio" class="admin-category-option" name="category" id="cat-muzi" value="muzi" />
               <label class="admin-btn" for="cat-muzi">Muži</label>
