@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini Login - trickohouse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles/style.css" />
+  <link rel="stylesheet" href="styles/admin-header.css" />
+  <link rel="stylesheet" href="styles/login-small.css" />
+</head>
+<body class="mini-login-page">
+  <header class="admin-header-header">
+    <div class="container admin-header-header__inner">
+      <a href="index.html" class="admin-header-logo">trickohouse admin</a>
+    </div>
+  </header>
+
+  <main class="mini-login-wrap" aria-labelledby="mini-login-title">
+    <section class="mini-login-card">
+      <h1 id="mini-login-title" class="mini-login-title">Prihlasenie</h1>
+      <form class="mini-login-form" id="adminLoginForm">
+        <label class="mini-login-label" for="mini-username">Email</label>
+        <input id="mini-username" name="email" type="email" class="mini-login-input" placeholder="admin@trickohouse.sk" required />
+
+        <label class="mini-login-label" for="mini-password">Heslo</label>
+        <input id="mini-password" name="password" type="password" class="mini-login-input" placeholder="••••••" required />
+
+        <div id="loginError" class="login-error login-error--hidden"></div>
+        <button type="submit" class="mini-login-btn">
+          <a href="admin-products.html">Prihlásenie
+          </a>
+          </button>
+      
+      </form>
+    </section>
+  </main>
+
+  <footer class="admin-header-footer">
+    <div class="container admin-header-footer__inner">
+      <p class="admin-header-footer__copy">Admin Panel WTECH 2026</p>
+    </div>
+  </footer>
+</body>
+</html>
+

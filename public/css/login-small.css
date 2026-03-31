@@ -1,0 +1,94 @@
+.mini-login-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(0, 194, 178, 0.16), transparent 35%),
+    radial-gradient(circle at 80% 85%, rgba(44, 44, 44, 0.12), transparent 38%),
+    #ececec;
+}
+
+.mini-login-wrap {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.mini-login-card {
+  width: 100%;
+  max-width: 400px;
+  background: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.09);
+  padding: 18px 16px 16px;
+}
+
+.mini-login-title {
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 14px;
+  color: #2a2a2a;
+  font-weight: 900;
+}
+
+.mini-login-form {
+  display: grid;
+  gap: 8px;
+}
+
+.mini-login-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #585858;
+  font-weight: 700;
+}
+
+.mini-login-input {
+  width: 100%;
+  height: 34px;
+  border: 1px solid #d8d8d8;
+  border-radius: 6px;
+  padding: 0 9px;
+  font-size: 13px;
+  background: #fbfbfb;
+  font-family: var(--font-body);
+}
+
+.mini-login-input:focus {
+  outline: 2px solid rgba(0, 194, 178, 0.2);
+  border-color: #00c2b2;
+}
+
+.mini-login-btn {
+  margin-top: 4px;
+  height: 34px;
+  border: 0;
+  border-radius: 6px;
+  background: #2a2a2a;
+  color: #ffffff;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.mini-login-btn:hover {
+  background: #00a99a;
+}
+
+.login-error {
+  color: #ff3b30;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.login-error--hidden {
+  display: none;
+}
