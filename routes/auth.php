@@ -19,7 +19,7 @@ Route::middleware('guest')->group(function () {
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             $token = bin2hex(random_bytes(32)); // Custom token for cookie
-            return redirect('/profile')->cookie('auth_token', $token, 60*24*30);
+            return redirect('/profil')->cookie('auth_token', $token, 60*24*30);
         }
 
         return back()->withErrors([
@@ -45,12 +45,12 @@ Route::middleware('guest')->group(function () {
         Auth::login($user);
         $token = bin2hex(random_bytes(32));
 
-        return redirect('/profile')->cookie('auth_token', $token, 60*24*30);
+        return redirect('/profil')->cookie('auth_token', $token, 60*24*30);
     });
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', function () {
+    Route::get('/profil', function () {
         return view('profile');
     })->name('profile');
 

@@ -12,13 +12,8 @@
   <link rel="stylesheet" href="styles/login-small.css" />
 </head>
 <body class="mini-login-page">
-  <header class="admin-header-header">
-    <div class="container admin-header-header__inner">
-      <a href="index.html" class="admin-header-logo">trickohouse admin</a>
-    </div>
-  </header>
-
-  <main class="mini-login-wrap" aria-labelledby="mini-login-title">
+  @include('include.admin-header')
+<main class="mini-login-wrap" aria-labelledby="mini-login-title">
     <section class="mini-login-card">
       <h1 id="mini-login-title" class="mini-login-title">Prihlasenie</h1>
       <form class="mini-login-form" id="adminLoginForm">
