@@ -7,12 +7,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles/style.css" />
-  <link rel="stylesheet" href="styles/admin-header.css" />
-  <link rel="stylesheet" href="styles/admin.css" />
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+  <link rel="stylesheet" href="{{ asset('css/admin-header.css') }}" />
+  <link rel="stylesheet" href="{{ asset('css/admin.css') }}" />
 </head>
 <body class="admin-page">
-  @include('include.admin-header')
+  @include('include.admin-header', ['page' => 'orders'])
 <main class="admin-shell">
     <header class="admin-toolbar" aria-label="Admin panel toolbar">
       <div class="admin-toolbar__left">

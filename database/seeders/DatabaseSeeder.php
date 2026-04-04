@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -20,5 +21,12 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'email' => 'test@example.com',
         ]);
+
+        Admin::create([
+        'name'     => 'Super Admin',
+        'email'    => 'admin@trickohouse.sk',
+        'password' => 'password123',
+        'level'    => 2,
+    ]);
     }
 }
