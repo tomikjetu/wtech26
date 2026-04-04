@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles/style.css" />
-  <link rel="stylesheet" href="styles/profile.css" />
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+  <link rel="stylesheet" href="{{ asset('css/profile.css') }}" />
 </head>
 <body class="profile-template-page">
 
@@ -66,8 +66,14 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </div>
         <div>
-          <p class="profile-name">Používateľské meno</p>
-          <a href="login.html" class="profile-logout">Odhlásiť sa</a>
+          <p class="profile-name">
+            @auth
+              {{ auth()->user()->email }}
+            @else
+              Používateľské meno
+            @endauth
+          </p>
+          <a href="/logout" class="profile-logout">Odhlásiť sa</a>
         </div>
       </div>
 

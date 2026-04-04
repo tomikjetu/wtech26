@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles/style.css" />
-  <link rel="stylesheet" href="styles/auth.css" />
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+  <link rel="stylesheet" href="{{ asset('css/auth.css') }}" />
 </head>
 <body>
 
@@ -62,21 +62,28 @@
       <div class="container">
         <div class="auth-card">
           <nav class="auth-card__tabs" aria-label="Prihlásenie alebo vytvorenie účtu">
-            <a href="login.html" class="auth-card__tab">Prihlásiť sa</a>
-            <a href="register.html" class="auth-card__tab auth-card__tab--active" aria-current="page">Vytvoriť účet</a>
+            <a href="/login" class="auth-card__tab">Prihlásiť sa</a>
+            <a href="/register" class="auth-card__tab auth-card__tab--active" aria-current="page">Vytvoriť účet</a>
           </nav>
 
           <h1 class="auth-card__title">Vytvoriť účet</h1>
 
-          <form class="auth-form" action="#" method="post">
+          <form class="auth-form" action="/register" method="post">
+            @csrf
             <div class="auth-form__group">
               <label for="register-email" class="auth-form__label">E-mail</label>
-              <input id="register-email" name="email" type="email" class="auth-form__input" required />
+              <input id="register-email" name="email" type="email" class="auth-form__input" required value="{{ old('email') }}" />
+              @error('email')
+                  <span class="error-msg" style="color:red; font-size:12px;">{{ $message }}</span>
+              @enderror
             </div>
 
             <div class="auth-form__group">
               <label for="register-password" class="auth-form__label">Heslo</label>
               <input id="register-password" name="password" type="password" class="auth-form__input" required />
+              @error('password')
+                  <span class="error-msg" style="color:red; font-size:12px;">{{ $message }}</span>
+              @enderror
             </div>
 
             <div class="auth-form__actions">

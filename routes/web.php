@@ -13,3 +13,5 @@ Route::get('/produkty', function () {
 Route::get('/produkty/{id}', function ($id) {
     return view('product-detail', ['id' => $id]);
 });
+
+require __DIR__.'/auth.php';
