@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="{{ asset('css/login-small.css') }}" />
 </head>
 <body class="mini-login-page">
-  @include('include.admin-header')
+  @include('include.admin-header', [ 'hideLogout' => true ])
 <main class="mini-login-wrap" aria-labelledby="mini-login-title">
     <section class="mini-login-card">
       <h1 id="mini-login-title" class="mini-login-title">Prihlasenie</h1>
