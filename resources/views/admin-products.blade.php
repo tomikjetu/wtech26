@@ -34,130 +34,83 @@
       </div>
 
       <button type="button" class="admin-add-global" aria-label="Pridat produkt" onclick="openProductModal()">
-        <a href="admin-productAdd.html">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
-        </svg>
-      </a>
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
       </button>
     </header>
 
     <section class="admin-list" aria-label="Zoznam produktov">
-      <article class="admin-row">
-        <div class="admin-thumb" aria-hidden="true"></div>
+      @foreach($products as $product)
+        @include('include.product-card-admin')
+      @endforeach
 
-        <div class="admin-id">
-          <label class="sr-only" for="name-1">Nazov produktu</label>
-          <input id="name-1" type="text" value="TrickoHouse core" />
-        </div>
-
-        <div class="admin-meta" role="group" aria-label="Nastavenia produktu 1">
-          <button type="button" class="admin-meta-chip" aria-label="Kategoria Tricka">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41 11 3.83V2h-1.83L2 9.17V11h1.83l9.58 9.59a2 2 0 0 0 2.83 0l4.35-4.35a2 2 0 0 0 0-2.83Z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-            <span>Kategoria: Tricka</span>
-          </button>
-          <button type="button" class="admin-meta-chip" aria-label="Cena 24.99 EUR">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            <span>Cena: 24.99 EUR</span>
-          </button>
-          <button type="button" class="admin-meta-chip" aria-label="Upravit cenu">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-            <span>Upravit cenu</span>
-          </button>
-        </div>
-
-        <button type="button" class="admin-remove" aria-label="Odstranit produkt">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /></svg>
-        </button>
-      </article>
-
-      <article class="admin-row">
-        <div class="admin-thumb" aria-hidden="true"></div>
-
-        <div class="admin-id">
-          <label class="sr-only" for="name-2">Nazov produktu</label>
-          <input id="name-2" type="text" value="Hoodie" />
-        </div>
-
-        <div class="admin-meta" role="group" aria-label="Nastavenia produktu 2">
-          <button type="button" class="admin-meta-chip" aria-label="Kategoria Mikiny">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41 11 3.83V2h-1.83L2 9.17V11h1.83l9.58 9.59a2 2 0 0 0 2.83 0l4.35-4.35a2 2 0 0 0 0-2.83Z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-            <span>Kategoria: Mikiny</span>
-          </button>
-          <button type="button" class="admin-meta-chip" aria-label="Cena 59.99 EUR">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            <span>Cena: 59.99 EUR</span>
-          </button>
-          <button type="button" class="admin-meta-chip" aria-label="Upravit cenu">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-            <span>Upravit cenu</span>
-          </button>
-        </div>
-
-        <button type="button" class="admin-remove" aria-label="Odstranit produkt">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /></svg>
-        </button>
-      </article>
-
-      <article class="admin-row">
-        <div class="admin-thumb" aria-hidden="true"></div>
-
-        <div class="admin-id">
-          <label class="sr-only" for="name-3">Nazov produktu</label>
-          <input id="name-3" type="text" value="TrickoHouse Sport" />
-        </div>
-
-        <div class="admin-meta" role="group" aria-label="Nastavenia produktu 3">
-          <button type="button" class="admin-meta-chip" aria-label="Kategoria Tricka">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41 11 3.83V2h-1.83L2 9.17V11h1.83l9.58 9.59a2 2 0 0 0 2.83 0l4.35-4.35a2 2 0 0 0 0-2.83Z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-            <span>Kategoria: Tricka</span>
-          </button>
-          <button type="button" class="admin-meta-chip" aria-label="Cena 29.99 EUR">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            <span>Cena: 29.99 EUR</span>
-          </button>
-          <button type="button" class="admin-meta-chip" aria-label="Upravit cenu">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-            <span>Upravit cenu</span>
-          </button>
-        </div>
-
-        <button type="button" class="admin-remove" aria-label="Odstranit produkt">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /></svg>
-        </button>
-      </article>
-
-      <article class="admin-row">
-        <div class="admin-thumb" aria-hidden="true"></div>
-
-        <div class="admin-id">
-          <label class="sr-only" for="name-4">Nazov produktu</label>
-          <input id="name-4" type="text" value="TrickoHouse biele" />
-        </div>
-
-        <div class="admin-meta" role="group" aria-label="Nastavenia produktu 4">
-          <button type="button" class="admin-meta-chip" aria-label="Kategoria Tricka">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41 11 3.83V2h-1.83L2 9.17V11h1.83l9.58 9.59a2 2 0 0 0 2.83 0l4.35-4.35a2 2 0 0 0 0-2.83Z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-            <span>Kategoria: Tricka</span>
-          </button>
-          <button type="button" class="admin-meta-chip" aria-label="Cena 24.99 EUR">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            <span>Cena: 24.99 EUR</span>
-          </button>
-          <button type="button" class="admin-meta-chip" aria-label="Upravit cenu">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-            <span>Upravit cenu</span>
-          </button>
-        </div>
-
-        <button type="button" class="admin-remove" aria-label="Odstranit produkt">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /></svg>
-        </button>
-      </article>
-
-      <button type="button" class="admin-add-row" aria-label="Pridat novy produkt">
+      <button type="button" class="admin-add-row" aria-label="Pridat novy produkt" onclick="openProductModal()">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
       </button>
     </section>
+
+    <!-- Product Modal -->
+    <div id="productModal" class="admin-modal">
+      <div class="admin-modal__backdrop" onclick="closeProductModal()"></div>
+      <div class="admin-modal__content">
+        <div class="admin-modal__header">
+          <h2>Pridať produkt</h2>
+          <button type="button" class="admin-modal__close" onclick="closeProductModal()">✕</button>
+        </div>
+            <form id="productForm" class="admin-modal__form" method="POST" action="{{ route('products.store') }}">
+            @csrf
+              <div class="admin-form-group">
+            <label for="productName">Názov produktu *</label>
+            <input type="text" id="productName" name="name" required placeholder="Napríklad: TrickoHouse core" />
+            <span class="admin-form-error" id="nameError"></span>
+          </div>
+          <div class="admin-form-group">
+            <label for="productDescription">Popis *</label>
+            <textarea id="productDescription" name="description" required placeholder="Popis produktu..." rows="4"></textarea>
+            <span class="admin-form-error" id="descriptionError"></span>
+          </div>
+          <div class="admin-form-group">
+            <label for="productPrice">Cena (EUR) *</label>
+            <input type="number" id="productPrice" name="price" required placeholder="Napríklad: 24.99" step="0.01" min="0" />
+            <span class="admin-form-error" id="priceError"></span>
+          </div>
+          <div class="admin-form-group">
+            <label for="productStock">Sklad (ks) *</label>
+            <input type="number" id="productStock" name="stock" required placeholder="Napríklad: 100" min="0" />
+            <span class="admin-form-error" id="stockError"></span>
+          </div>
+          <div class="admin-form-group">
+            <div class="admin-category-header">
+              <label>Kategória *</label>
+            </div>
+            <div class="admin-category-grid">
+              <input type="radio" class="admin-category-option" name="category" id="cat-muzi" value="muzi" />
+              <label class="admin-btn" for="cat-muzi">Muži</label>
+              <input type="radio" class="admin-category-option" name="category" id="cat-zeny" value="zeny" />
+              <label class="admin-btn" for="cat-zeny">Ženy</label>
+              <input type="radio" class="admin-category-option" name="category" id="cat-oblecenie" value="oblecenie" />
+              <label class="admin-btn" for="cat-oblecenie">Oblečenie</label>
+              <input type="radio" class="admin-category-option" name="category" id="cat-topanky" value="topanky" />
+              <label class="admin-btn" for="cat-topanky">Topánky</label>
+              <input type="radio" class="admin-category-option" name="category" id="cat-vypredaj" value="vypredaj" />
+              <label class="admin-btn" for="cat-vypredaj">Výpredaj</label>
+              <input type="radio" class="admin-category-option" name="category" id="cat-doplnky" value="doplnky" />
+              <label class="admin-btn" for="cat-doplnky">Doplnky</label>
+            </div>
+            <span class="admin-form-error" id="categoryError"></span>
+          </div>
+          <div class="admin-form-group">
+            <label for="productPhotos">Fotografie (minimum 2) *</label>
+            <input type="file" id="productPhotos" name="photos" multiple accept="image/*" />
+            <span class="admin-form-error" id="photosError"></span>
+            <div id="photoPreview" class="admin-photo-preview"></div>
+          </div>
+          <div class="admin-modal__actions">
+            <button type="button" class="admin-modal__btn admin-modal__btn--cancel" onclick="closeProductModal()">Zrušiť</button>
+            <button type="submit" class="admin-modal__btn admin-modal__btn--save">Uložiť produkt</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </main>
 
   <footer class="admin-header-footer">
@@ -170,7 +123,16 @@
       </div>
       <p class="admin-header-footer__copy">Admin Panel WTECH 2026</p>
     </div>
+  </footer>
+
+  <script>
+    function openProductModal() {
+      document.getElementById('productModal').classList.add('admin-modal--visible');
+    }
+    function closeProductModal() {
+      document.getElementById('productModal').classList.remove('admin-modal--visible');
+    }
+  </script>
 
 </body>
 </html>
-

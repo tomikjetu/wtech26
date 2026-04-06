@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Product;
 
 class DatabaseSeeder extends Seeder
 {
@@ -27,6 +28,13 @@ class DatabaseSeeder extends Seeder
         'email'    => 'admin@trickohouse.sk',
         'password' => 'password123',
         'level'    => 2,
-    ]);
+        ]);
+
+        Product::create([
+        'name' => 'TrickoHouse Core',
+        'price' => 24.99,
+        'description' => 'A basic core t-shirt.',
+        'stock' => 100,
+        ]);
     }
 }

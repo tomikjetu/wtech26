@@ -8,11 +8,11 @@
       <a href="/admin/orders" class="admin-header-link {{ ($page ?? '') === 'orders' ? 'admin-header-link--active' : '' }}" aria-current="{{ ($page ?? '') === 'orders' ? 'page' : 'false' }}">Objednavky</a>
     </nav>
 
-    {{ $hideLogout ? null : '
+    {!! $hideLogout ? null : '
       <form method="POST" action="/admin/logout">
           @csrf
           <button type="submit" class="admin-btn admin-btn--logout">ODHLASIŤ</button>
       </form>
-    '}}
+    ' !!}
   </div>
 </header>

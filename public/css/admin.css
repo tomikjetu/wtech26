@@ -270,7 +270,7 @@
 
 /* Modal styles */
 .admin-modal {
-  display: flex;
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -366,6 +366,7 @@
 .admin-form-group input[type="text"],
 .admin-form-group input[type="email"],
 .admin-form-group input[type="file"],
+.admin-form-group input[type="number"],
 .admin-form-group textarea {
   width: 100%;
   background: rgba(255, 255, 255, 0.05);

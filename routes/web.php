@@ -3,12 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Helpers\MockData;
+use App\Http\Controllers\ProductController;
 
 /* ─────────────────────────────────── HOMEPAGE ──────────────────────────────── */
 
-Route::get('/', function () {
-    return view('index');
-})->name('home');
+Route::get('/', [ProductController::class, 'index'])->name('home');
 
 /* ──────────────────────────────────── PRODUCTS ─────────────────────────────── */
 
@@ -146,13 +145,17 @@ Route::post('/admin/login', [AuthController::class, 'login']);
 Route::middleware('auth:admin')->group(function () {
     Route::get('/admin', fn () => redirect()->route('admin.products'));
 
-    Route::get('/admin/products', fn () => view('admin-products'))
-        ->name('admin.products');
+    Route::get('/admin/products', [ProductController::class, 'adminIndex'])->name('admin.products');
 
-    Route::get('/admin/orders', fn () => view('admin-orders'))
+    Route::post('/admin/products', [ProductController::class, 'store'])
+        ->name('products.store');
+
+    Route::delete('/admin/products/{id}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
+
+    Route::get('/admin/orders', fn () => view('admin-orders',['hideLogout' => false]))
         ->name('admin.orders');
 
-    Route::get('/admin/categories', fn () => view('admin-categories'))
+    Route::get('/admin/categories', fn () => view('admin-categories', ['hideLogout' => false]))
         ->name('admin.categories');
 });
 
