@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>trickohouse — Zoznam produktov</title>
+  <title>{{ $pageTitle }} — trickohouse</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
@@ -13,148 +13,178 @@
 <body>
 
   @include('include.header')
-<main>
+
+  <main>
     <div class="container">
 
       <!-- ===== LISTING WRAPPER ===== -->
       <div class="listing-wrapper">
 
-        <!-- FULL-WIDTH HEADER -->
+        <!-- FULL-WIDTH HEADER BAR -->
         <div class="listing-header">
-  <span class="listing-header__count">4 produkty</span>
+          <span class="listing-header__count">
+            @php
+              $c = count($products);
+              $label = $c === 1 ? 'produkt' : ($c < 5 ? 'produkty' : 'produktov');
+            @endphp
+            {{ $c }} {{ $label }}
+            @if ($mode === 'featured')
+              &mdash; odporúčané
+            @elseif ($mode === 'category' && $selectedCategory)
+              &mdash; {{ $selectedCategory['name'] }}
+            @elseif ($mode === 'search' && $searchQuery)
+              &mdash; „{{ $searchQuery }}"
+            @endif
+          </span>
 
-  <div class="products-filters-wrapper">
-    <div class="listing-header__search sec-nav__search">
-      <input type="text" placeholder="L Tričko" aria-label="Hľadať v produktoch" />
-      <button aria-label="Search">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-      </button>
-    </div>
+          <div class="products-filters-wrapper">
+            <form class="listing-header__search sec-nav__search"
+                  data-search-base="{{ url('/produkty/hladat') }}"
+                  action="#"
+                  onsubmit="return false;">
+              <input type="text"
+                     placeholder="Hľadať produkty..."
+                     aria-label="Hľadať v produktoch"
+                     value="{{ $searchQuery ?? '' }}" />
+              <button type="submit" aria-label="Search">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+              </button>
+            </form>
 
-    <div class="sort-control">
-      <label for="sortSelect">Zoradiť:</label>
-      <select id="sortSelect">
-        <option value="default">Odporúčané</option>
-        <option value="price-asc">Cena: od najnižšej</option>
-        <option value="price-desc">Cena: od najvyššej</option>
-      </select>
-    </div>
-  </div>
-</div>
+            <div class="sort-control">
+              <label for="sortSelect">Zoradiť:</label>
+              <select id="sortSelect">
+                <option value="default">Odporúčané</option>
+                <option value="price-asc">Cena: od najnižšej</option>
+                <option value="price-desc">Cena: od najvyššej</option>
+              </select>
+            </div>
+          </div>
+        </div>
 
-        <!-- SIDEBAR + GRID ROW -->
+        <!-- SIDEBAR + GRID -->
         <div class="listing-body">
 
-          <!-- SIDEBAR FILTER -->
-          <aside class="filter-sidebar">
+          <!-- ===== FILTER SIDEBAR ===== -->
+          {{-- Filters post to current URL so category/search context is preserved --}}
+          <form class="filter-sidebar" method="GET" action="{{ request()->url() }}">
 
-            <div class="filter-group">
-              <h3 class="filter-group__title">Kategória</h3>
-              <ul class="filter-group__list">
-                <li>
-                  <label class="filter-checkbox">
-                    <input type="checkbox" name="category" value="uzasne" checked />
-                    <span class="filter-checkbox__box"></span>
-                    <span class="filter-checkbox__label">Úžasné</span>
-                    <span class="filter-checkbox__count">(20)</span>
-                  </label>
-                </li>
-                <li>
-                  <label class="filter-checkbox">
-                    <input type="checkbox" name="category" value="mega" />
-                    <span class="filter-checkbox__box"></span>
-                    <span class="filter-checkbox__label">Mega</span>
-                    <span class="filter-checkbox__count">(20)</span>
-                  </label>
-                </li>
-              </ul>
-            </div>
+            @if ($mode === 'category' && $selectedCategory)
+              {{-- Show the active category as a badge with a clear link --}}
+              <div class="filter-active-category">
+                <span class="filter-active-category__label">{{ $selectedCategory['name'] }}</span>
+                <a href="{{ route('products.all') }}"
+                   class="filter-active-category__clear"
+                   aria-label="Zrušiť filter kategórie">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </a>
+              </div>
+            @else
+              {{-- Category navigation links — clicking navigates to /produkty/kategoria/{slug} --}}
+              <div class="filter-group">
+                <h3 class="filter-group__title">Kategória</h3>
+                <ul class="filter-group__list">
+                  @foreach ($categories as $cat)
+                    <li>
+                      <a href="{{ route('products.category', $cat['slug']) }}"
+                         class="filter-category-link">
+                        <span class="filter-checkbox__label">{{ $cat['name'] }}</span>
+                        <span class="filter-checkbox__count">({{ $cat['count'] }})</span>
+                      </a>
+                    </li>
+                  @endforeach
+                </ul>
+              </div>
+            @endif
 
+            <!-- Size filter -->
             <div class="filter-group">
               <h3 class="filter-group__title">Veľkosť</h3>
               <ul class="filter-group__list">
-                <li>
-                  <label class="filter-checkbox">
-                    <input type="checkbox" name="size" value="m" />
-                    <span class="filter-checkbox__box"></span>
-                    <span class="filter-checkbox__label">M</span>
-                    <span class="filter-checkbox__count">(20)</span>
-                  </label>
-                </li>
-                <li>
-                  <label class="filter-checkbox">
-                    <input type="checkbox" name="size" value="l" checked />
-                    <span class="filter-checkbox__box"></span>
-                    <span class="filter-checkbox__label">L</span>
-                    <span class="filter-checkbox__count">(20)</span>
-                  </label>
-                </li>
+                @foreach ($sizes as $size)
+                  @php $sizeVal = strtolower($size); @endphp
+                  <li>
+                    <label class="filter-checkbox">
+                      <input type="checkbox" name="sizes[]" value="{{ $sizeVal }}"
+                             {{ in_array($sizeVal, (array) ($activeFilters['sizes'] ?? [])) ? 'checked' : '' }} />
+                      <span class="filter-checkbox__box"></span>
+                      <span class="filter-checkbox__label">{{ $size }}</span>
+                    </label>
+                  </li>
+                @endforeach
               </ul>
             </div>
 
+            <!-- Color filter -->
             <div class="filter-group">
               <h3 class="filter-group__title">Farba</h3>
               <ul class="filter-group__list">
-                <li>
-                  <label class="filter-checkbox">
-                    <input type="checkbox" name="color" value="biela" checked />
-                    <span class="filter-checkbox__box"></span>
-                    <span class="filter-checkbox__label">Biela</span>
-                    <span class="filter-checkbox__count">(20)</span>
-                  </label>
-                </li>
-                <li>
-                  <label class="filter-checkbox">
-                    <input type="checkbox" name="color" value="cierna" checked />
-                    <span class="filter-checkbox__box"></span>
-                    <span class="filter-checkbox__label">Čierna</span>
-                    <span class="filter-checkbox__count">(20)</span>
-                  </label>
-                </li>
+                @foreach ($colors as $color)
+                  <li>
+                    <label class="filter-checkbox">
+                      <input type="checkbox" name="colors[]" value="{{ $color['value'] }}"
+                             {{ in_array($color['value'], (array) ($activeFilters['colors'] ?? [])) ? 'checked' : '' }} />
+                      <span class="filter-checkbox__box"></span>
+                      <span class="filter-checkbox__label">{{ $color['label'] }}</span>
+                    </label>
+                  </li>
+                @endforeach
               </ul>
             </div>
 
-          </aside>
+            <!-- Price range filter -->
+            <div class="filter-group">
+              <h3 class="filter-group__title">Cena do</h3>
+              <div class="filter-range">
+                <div class="filter-range__value">
+                  <span id="priceMaxDisplay">{{ $activeFilters['price_max'] ?? 100 }}€</span>
+                </div>
+                <input type="range" id="priceMax" name="price_max"
+                       class="filter-range__slider"
+                       min="0" max="100" step="1"
+                       value="{{ $activeFilters['price_max'] ?? 100 }}" />
+              </div>
+            </div>
 
-          <!-- PRODUCTS GRID -->
+          </form><!-- /.filter-sidebar -->
+
+          <!-- ===== PRODUCTS GRID ===== -->
           <div class="products-listing">
 
-            <a href="productDetail.html" class="product-card product-card--grid">
-              <button class="wishlist-btn" aria-label="Add to wishlist"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-              <div class="product-card__img product-card__img--shirt-white"></div>
-              <p class="product-card__name">TrickoHouse core</p>
-              <p class="product-card__price">24.99€</p>
-            </a>
+            @forelse ($products as $product)
+              <a href="{{ route('product.detail', $product['id']) }}" class="product-card product-card--grid">
+                <button class="wishlist-btn" aria-label="Add to wishlist"
+                        onclick="event.preventDefault(); event.stopPropagation();">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </button>
 
-            <a href="productDetail.html" class="product-card product-card--grid">
-              <button class="wishlist-btn" aria-label="Add to wishlist"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-              <span class="badge badge--sale">-15%</span>
-              <div class="product-card__img product-card__img--hoodie-black"></div>
-              <p class="product-card__name">Hoodie</p>
-              <p class="product-card__price">59.99€</p>
-            </a>
+                @if ($product['sale_percent'])
+                  <span class="badge badge--sale">-{{ $product['sale_percent'] }}%</span>
+                @endif
 
-            <a href="productDetail.html" class="product-card product-card--grid">
-              <button class="wishlist-btn" aria-label="Add to wishlist"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-              <div class="product-card__img product-card__img--shirt-white"></div>
-              <p class="product-card__name">TrickoHouse Sport</p>
-              <p class="product-card__price">29.99€</p>
-            </a>
-
-            <a href="productDetail.html" class="product-card product-card--grid">
-              <button class="wishlist-btn" aria-label="Add to wishlist"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-              <span class="badge badge--sale">-20%</span>
-              <div class="product-card__img product-card__img--tote"></div>
-              <p class="product-card__name">TrickoHouse biele</p>
-              <p class="product-card__price">24.99€</p>
-            </a>
+                <div class="product-card__img {{ $product['img_class'] }}"></div>
+                <p class="product-card__name">{{ $product['name'] }}</p>
+                <p class="product-card__price">
+                  @if ($product['original_price'])
+                    <span class="product-card__price--original">{{ number_format($product['original_price'], 2) }}€</span>
+                  @endif
+                  {{ number_format($product['price'], 2) }}€
+                </p>
+              </a>
+            @empty
+              <div class="products-listing__empty">
+                <p>Žiadne produkty sa nezhodujú s vašimi filtrami.</p>
+                <a href="{{ route('products.all') }}" class="btn btn--outline">Zobraziť všetky</a>
+              </div>
+            @endforelse
 
           </div><!-- /.products-listing -->
 
         </div><!-- /.listing-body -->
-
       </div><!-- /.listing-wrapper -->
 
     </div><!-- /.container -->
@@ -202,6 +232,7 @@
     </div>
   </footer>
 
-  <script src="assets/nav.js" defer></script>
+  <script src="{{ asset('js/nav.js') }}" defer></script>
+
 </body>
 </html>

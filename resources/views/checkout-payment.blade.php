@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles/style.css" />
-  <link rel="stylesheet" href="styles/checkout.css" />
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+  <link rel="stylesheet" href="{{ asset('css/checkout.css') }}" />
 </head>
 <body>
 
@@ -92,8 +92,8 @@
         </div>
 
         <div class="payment-methods__actions">
-          <a href="checkout-delivery.html" class="btn btn--outline">Späť k doprave</a>
-          <a href="checkout-personal.html" class="btn btn--teal">Pokračovať k údajom</a>
+          <a href="{{ route('checkout.delivery') }}" class="btn btn--outline">Späť k doprave</a>
+          <a href="{{ route('checkout.personal') }}" class="btn btn--teal">Pokračovať k údajom</a>
         </div>
       </div>
     </section>
@@ -144,6 +144,6 @@
     </div>
   </footer>
 
-  <script src="assets/nav.js" defer></script>
+  <script src="{{ asset('js/nav.js') }}" defer></script>
 </body>
 </html>
