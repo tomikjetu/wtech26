@@ -30,30 +30,12 @@
       <div class="container">
         <h2 class="section__title">KATEGÓRIE</h2>
         <div class="categories__grid">
-          <a href="/produkty" class="category-card">
-            <div class="category-card__img category-card__img--muzi"></div>
-            <span>MUŽI</span>
-          </a>
-          <a href="/produkty" class="category-card">
-            <div class="category-card__img category-card__img--zeny"></div>
-            <span>ŽENY</span>
-          </a>
-          <a href="/produkty" class="category-card">
-            <div class="category-card__img category-card__img--oblecenie"></div>
-            <span>OBLEČENIE</span>
-          </a>
-          <a href="/produkty" class="category-card">
-            <div class="category-card__img category-card__img--topanky"></div>
-            <span>TOPÁNKY</span>
-          </a>
-          <a href="/produkty" class="category-card">
-            <div class="category-card__img category-card__img--vypredaj"></div>
-            <span>VÝPREDAJ</span>
-          </a>
-          <a href="/produkty" class="category-card">
-            <div class="category-card__img category-card__img--doplnky"></div>
-            <span>DOPLNKY</span>
-          </a>
+      @foreach($categories as $category)
+        <a href="/produkty/kategoria/{{ $category->name }}" class="category-card">
+          <div class="category-card__img category-card__img--{{ $category->name }}"></div>
+          <span>{{ strtoupper($category->display_name) }}</span>
+        </a>
+    @endforeach
         </div>
       </div>
     </section>
@@ -172,17 +154,6 @@
     </div>
   </footer>
 
-  <script>
-    document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
-      const carousel = wrapper.querySelector('.products-carousel');
-      wrapper.querySelector('.carousel-btn--next').addEventListener('click', () => {
-        carousel.scrollBy({ left: 220, behavior: 'smooth' });
-      });
-      wrapper.querySelector('.carousel-btn--prev').addEventListener('click', () => {
-        carousel.scrollBy({ left: -220, behavior: 'smooth' });
-      });
-    });
-  </script>
   <script src="{{ asset('js/nav.js') }}" defer></script>
 </body>
 </html>

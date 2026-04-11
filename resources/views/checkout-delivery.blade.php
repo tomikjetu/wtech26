@@ -48,47 +48,37 @@
       <div class="container">
         <h1 class="section__title">Vyberte spôsob dopravy</h1>
 
-        <div class="delivery-methods__grid">
-
+        <form method="POST" action="{{ route('checkout.delivery.post') }}">
+          @csrf
+          <div class="delivery-methods__grid">
+      @php      
+      
+      $delivery_methods = [
+            ['name' => 'standard', 'title' => 'Štandardná doprava', 'description' => 'Doručenie do 3-5 pracovných dní', 'price' => 4.99],
+            ['name' => 'express', 'title' => 'Expresná doprava', 'description' => 'Doručenie do 1-2 pracovných dní', 'price' => 9.99],
+            ['name' => 'pickup', 'title' => 'Osobný odber', 'description' => 'Vyzdvihnutie v našej predajni', 'price' => 0.00],
+      ]
+      @endphp    
+      
+      @foreach ($delivery_methods as $method)
           <label class="delivery-method">
-            <input type="radio" name="delivery" value="standard" checked />
+            <input type="radio" name="delivery" value="{{ $method['name'] }}" {{ ($delivery_method ?? 'standard') == $method['name'] ? 'checked' : '' }} />
             <div class="delivery-method__content">
               <div class="delivery-method__info">
-                <h3 class="delivery-method__title">Štandardná doprava</h3>
-                <p class="delivery-method__description">Doručenie do 3-5 pracovných dní</p>
+                <h3 class="delivery-method__title">{{ $method['title'] }}</h3>
+                <p class="delivery-method__description">{{ $method['description'] }}</p>
               </div>
-              <div class="delivery-method__price">4.99€</div>
+              <div class="delivery-method__price">{{ number_format($method['price'], 2) }}€</div>
             </div>
           </label>
-
-          <label class="delivery-method">
-            <input type="radio" name="delivery" value="express" />
-            <div class="delivery-method__content">
-              <div class="delivery-method__info">
-                <h3 class="delivery-method__title">Expresná doprava</h3>
-                <p class="delivery-method__description">Doručenie do 1-2 pracovných dní</p>
-              </div>
-              <div class="delivery-method__price">9.99€</div>
-            </div>
-          </label>
-
-          <label class="delivery-method">
-            <input type="radio" name="delivery" value="pickup" />
-            <div class="delivery-method__content">
-              <div class="delivery-method__info">
-                <h3 class="delivery-method__title">Osobný odber</h3>
-                <p class="delivery-method__description">Vyzdvihnutie v našej predajni</p>
-              </div>
-              <div class="delivery-method__price">0.00€</div>
-            </div>
-          </label>
-
+      @endforeach
         </div>
 
         <div class="delivery-methods__actions">
           <a href="{{ route('cart') }}" class="btn btn--outline">Späť do košíka</a>
-          <a href="{{ route('checkout.payment') }}" class="btn btn--teal">Pokračovať k platbe</a>
+          <button type="submit" class="btn btn--teal">Pokračovať k platbe</button>
         </div>
+        </form>
       </div>
     </section>
 

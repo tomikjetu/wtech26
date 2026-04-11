@@ -29,7 +29,7 @@
             <p class="order-confirmation__message">
               Ďakujeme za vašu objednávku. Dostanete potvrdenie na email.
             </p>
-            <p class="order-confirmation__order-number">Číslo objednávky: <strong>#TRK-2026-001</strong></p>
+            <p class="order-confirmation__order-number">Číslo objednávky: <strong>#TRK-{{ str_pad($order->id, 4, '0', STR_PAD_LEFT) }}</strong></p>
           </div>
 
           <div class="order-confirmation__actions">

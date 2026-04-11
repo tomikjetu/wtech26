@@ -109,3 +109,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+ document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
+      const carousel = wrapper.querySelector('.products-carousel');
+      wrapper.querySelector('.carousel-btn--next').addEventListener('click', () => {
+        carousel.scrollBy({ left: 220, behavior: 'smooth' });
+      });
+      wrapper.querySelector('.carousel-btn--prev').addEventListener('click', () => {
+        carousel.scrollBy({ left: -220, behavior: 'smooth' });
+      });
+    });

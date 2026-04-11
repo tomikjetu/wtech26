@@ -177,6 +177,34 @@ PRODUCTS GRID
   height: 200px;
 }
 
+/* Pagination buttons */
+
+.pagination {
+    display: flex;
+    gap: 4px;
+    list-style: none;
+    padding: 16px 0;
+}
+
+.pagination .page-link {
+    padding: 4px 10px;
+    font-size: 13px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    color: var(--text);
+    background: var(--white);
+}
+
+.pagination .page-item.active .page-link {
+    background: var(--dark);
+    color: var(--white);
+    border-color: var(--dark);
+}
+
+.pagination .page-item.disabled .page-link {
+    color: var(--muted);
+    cursor: default;
+}
 /* ============================================================
 RESPONSIVE — Tablet ≤ 800px
 ============================================================ */

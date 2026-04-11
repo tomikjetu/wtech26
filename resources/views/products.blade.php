@@ -43,9 +43,9 @@
                   action="#"
                   onsubmit="return false;">
               <input type="text"
-                     placeholder="Hľadať produkty..."
-                     aria-label="Hľadať v produktoch"
-                     value="{{ $searchQuery ?? '' }}" />
+                    placeholder="Hľadať produkty..."
+                    aria-label="Hľadať v produktoch"
+                    value="{{ $searchQuery ?? '' }}" />
               <button type="submit" aria-label="Search">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
@@ -56,10 +56,10 @@
             <div class="sort-control">
               <label for="sortSelect">Zoradiť:</label>
               <select id="sortSelect">
-                <option value="default">Odporúčané</option>
-                <option value="price-asc">Cena: od najnižšej</option>
-                <option value="price-desc">Cena: od najvyššej</option>
-              </select>
+    <option value="default" {{ request('sort', 'default') == 'default' ? 'selected' : '' }}>Odporúčané</option>
+    <option value="price-asc" {{ request('sort') == 'price-asc' ? 'selected' : '' }}>Cena: od najnižšej</option>
+    <option value="price-desc" {{ request('sort') == 'price-desc' ? 'selected' : '' }}>Cena: od najvyššej</option>
+          </select>
             </div>
           </div>
         </div>
@@ -70,14 +70,15 @@
           <!-- ===== FILTER SIDEBAR ===== -->
           {{-- Filters post to current URL so category/search context is preserved --}}
           <form class="filter-sidebar" method="GET" action="{{ request()->url() }}">
+          <input type="hidden" id="sortHidden" name="sort" value="{{ request('sort', 'default') }}" />
 
             @if ($mode === 'category' && $selectedCategory)
               {{-- Show the active category as a badge with a clear link --}}
               <div class="filter-active-category">
-                <span class="filter-active-category__label">{{ $selectedCategory['name'] }}</span>
+                <span class="filter-active-category__label">{{ $selectedCategory['display_name'] }}</span>
                 <a href="{{ route('products.all') }}"
-                   class="filter-active-category__clear"
-                   aria-label="Zrušiť filter kategórie">
+                  class="filter-active-category__clear"
+                  aria-label="Zrušiť filter kategórie">
                   <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                   </svg>
@@ -88,15 +89,13 @@
               <div class="filter-group">
                 <h3 class="filter-group__title">Kategória</h3>
                 <ul class="filter-group__list">
-                  @foreach ($categories as $cat)
-                    <li>
-                      <a href="{{ route('products.category', $cat['slug']) }}"
-                         class="filter-category-link">
-                        <span class="filter-checkbox__label">{{ $cat['name'] }}</span>
-                        <span class="filter-checkbox__count">({{ $cat['count'] }})</span>
-                      </a>
-                    </li>
-                  @endforeach
+              @foreach ($categories as $cat)
+                <li>
+                    <a href="{{ route('products.category', $cat->name) }}" class="filter-category-link">
+                        <span class="filter-checkbox__label">{{ $cat->display_name }}</span>
+                    </a>
+                </li>
+              @endforeach
                 </ul>
               </div>
             @endif
@@ -106,16 +105,15 @@
               <h3 class="filter-group__title">Veľkosť</h3>
               <ul class="filter-group__list">
                 @foreach ($sizes as $size)
-                  @php $sizeVal = strtolower($size); @endphp
-                  <li>
-                    <label class="filter-checkbox">
-                      <input type="checkbox" name="sizes[]" value="{{ $sizeVal }}"
-                             {{ in_array($sizeVal, (array) ($activeFilters['sizes'] ?? [])) ? 'checked' : '' }} />
-                      <span class="filter-checkbox__box"></span>
-                      <span class="filter-checkbox__label">{{ $size }}</span>
-                    </label>
-                  </li>
-                @endforeach
+    <li>
+        <label class="filter-checkbox">
+            <input type="checkbox" name="sizes[]" value="{{ $size->name }}"
+                {{ in_array($size->name, (array) ($activeFilters['sizes'] ?? [])) ? 'checked' : '' }} />
+            <span class="filter-checkbox__box"></span>
+            <span class="filter-checkbox__label">{{ $size->name }}</span>
+        </label>
+    </li>
+@endforeach
               </ul>
             </div>
 
@@ -124,14 +122,14 @@
               <h3 class="filter-group__title">Farba</h3>
               <ul class="filter-group__list">
                 @foreach ($colors as $color)
-                  <li>
-                    <label class="filter-checkbox">
-                      <input type="checkbox" name="colors[]" value="{{ $color['value'] }}"
-                             {{ in_array($color['value'], (array) ($activeFilters['colors'] ?? [])) ? 'checked' : '' }} />
-                      <span class="filter-checkbox__box"></span>
-                      <span class="filter-checkbox__label">{{ $color['label'] }}</span>
-                    </label>
-                  </li>
+                    <li>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" name="colors[]" value="{{ $color }}"
+                                {{ in_array($color, (array) ($activeFilters['colors'] ?? [])) ? 'checked' : '' }} />
+                            <span class="filter-checkbox__box"></span>
+                            <span class="filter-checkbox__label">{{ $color }}</span>
+                        </label>
+                    </li>
                 @endforeach
               </ul>
             </div>
@@ -144,9 +142,9 @@
                   <span id="priceMaxDisplay">{{ $activeFilters['price_max'] ?? 100 }}€</span>
                 </div>
                 <input type="range" id="priceMax" name="price_max"
-                       class="filter-range__slider"
-                       min="0" max="100" step="1"
-                       value="{{ $activeFilters['price_max'] ?? 100 }}" />
+                      class="filter-range__slider"
+                      min="0" max="100" step="1"
+                      value="{{ $activeFilters['price_max'] ?? 100 }}" />
               </div>
             </div>
 
@@ -156,31 +154,27 @@
           <div class="products-listing">
 
             @forelse ($products as $product)
-              <a href="{{ route('product.detail', $product['id']) }}" class="product-card product-card--grid">
-                <button class="wishlist-btn" aria-label="Add to wishlist"
-                        onclick="event.preventDefault(); event.stopPropagation();">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                </button>
+    <a href="{{ route('product.detail', $product->id) }}" class="product-card product-card--grid">
+        <div class="product-card__img product-card__img--shirt-white"></div>
 
-                @if ($product['sale_percent'])
-                  <span class="badge badge--sale">-{{ $product['sale_percent'] }}%</span>
-                @endif
+        @if ($product->sale_percent)
+            <span class="badge badge--sale">-{{ $product->sale_percent }}%</span>
+        @endif
 
-                <div class="product-card__img {{ $product['img_class'] }}"></div>
-                <p class="product-card__name">{{ $product['name'] }}</p>
-                <p class="product-card__price">
-                  @if ($product['original_price'])
-                    <span class="product-card__price--original">{{ number_format($product['original_price'], 2) }}€</span>
-                  @endif
-                  {{ number_format($product['price'], 2) }}€
-                </p>
-              </a>
-            @empty
-              <div class="products-listing__empty">
-                <p>Žiadne produkty sa nezhodujú s vašimi filtrami.</p>
-                <a href="{{ route('products.all') }}" class="btn btn--outline">Zobraziť všetky</a>
-              </div>
-            @endforelse
+        
+        <p class="product-card__name">{{ $product->name }}</p>
+        <p class="product-card__price">
+            @if ($product->price && $product->sale_percent > 0)
+                <span class="product-card__price--original">{{ number_format($product->price, 2) }}€</span>
+            @endif
+            {{ number_format($product->price, 2) }}€
+        </p>
+    </a>
+@empty
+    <p>Žiadne produkty.</p>
+@endforelse
+
+{{ $products->links() }}
 
           </div><!-- /.products-listing -->
 
@@ -233,6 +227,6 @@
   </footer>
 
   <script src="{{ asset('js/nav.js') }}" defer></script>
-
+  <script src="{{ asset('js/productDetail.js') }}" defer></script>
 </body>
 </html>

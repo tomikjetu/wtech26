@@ -48,7 +48,8 @@
       <div class="container">
         <h1 class="section__title">Osobné údaje</h1>
 
-        <form class="personal-info__form">
+        <form method="POST" action="{{ route('checkout.personal.post') }}" class="personal-info__form">
+          @csrf
 
           <div class="form-section">
             <h2 class="form-section__title">Kontaktné údaje</h2>
@@ -56,11 +57,11 @@
             <div class="form-row">
               <div class="form-group">
                 <label for="email" class="form-label">Email *</label>
-                <input type="email" id="email" name="email" class="form-input" required />
+                <input type="email" id="email" name="email" class="form-input" value="{{ old('email', $personal_data['email'] ?? '') }}" required />
               </div>
               <div class="form-group">
                 <label for="phone" class="form-label">Telefón</label>
-                <input type="tel" id="phone" name="phone" class="form-input" />
+                <input type="tel" id="phone" name="phone" class="form-input" value="{{ old('phone', $personal_data['phone'] ?? '') }}" />
               </div>
             </div>
           </div>
@@ -71,27 +72,27 @@
             <div class="form-row">
               <div class="form-group">
                 <label for="firstName" class="form-label">Meno *</label>
-                <input type="text" id="firstName" name="firstName" class="form-input" required />
+                <input type="text" id="firstName" name="firstName" class="form-input" value="{{ old('firstName', $personal_data['firstName'] ?? '') }}" required />
               </div>
               <div class="form-group">
                 <label for="lastName" class="form-label">Priezvisko *</label>
-                <input type="text" id="lastName" name="lastName" class="form-input" required />
+                <input type="text" id="lastName" name="lastName" class="form-input" value="{{ old('lastName', $personal_data['lastName'] ?? '') }}" required />
               </div>
             </div>
 
             <div class="form-group">
               <label for="address" class="form-label">Adresa *</label>
-              <input type="text" id="address" name="address" class="form-input" placeholder="Ulice a číslo domu" required />
+              <input type="text" id="address" name="address" class="form-input" placeholder="Ulice a číslo domu" value="{{ old('address', $personal_data['address'] ?? '') }}" required />
             </div>
 
             <div class="form-row">
               <div class="form-group">
                 <label for="city" class="form-label">Mesto *</label>
-                <input type="text" id="city" name="city" class="form-input" required />
+                <input type="text" id="city" name="city" class="form-input" value="{{ old('city', $personal_data['city'] ?? '') }}" required />
               </div>
               <div class="form-group">
                 <label for="zip" class="form-label">PSČ *</label>
-                <input type="text" id="zip" name="zip" class="form-input" required />
+                <input type="text" id="zip" name="zip" class="form-input" value="{{ old('zip', $personal_data['zip'] ?? '') }}" required />
               </div>
             </div>
 
@@ -99,15 +100,15 @@
               <label for="country" class="form-label">Krajina *</label>
               <select id="country" name="country" class="form-input" required>
                 <option value="">Vyberte krajinu</option>
-                <option value="SK" selected>Slovensko</option>
-                <option value="CZ">Česká republika</option>
+                <option value="SK" {{ (old('country', $personal_data['country'] ?? 'SK') == 'SK') ? 'selected' : '' }}>Slovensko</option>
+                <option value="CZ" {{ (old('country', $personal_data['country'] ?? '') == 'CZ') ? 'selected' : '' }}>Česká republika</option>
               </select>
             </div>
           </div>
 
           <div class="form-section">
             <label class="checkbox-group">
-              <input type="checkbox" name="billingSame" checked />
+              <input type="checkbox" name="billingSame" value="1" {{ (old('billingSame', $personal_data['billingSame'] ?? true)) ? 'checked' : '' }} />
               <span class="checkbox-group__checkmark"></span>
               Fakturačná adresa je rovnaká ako dodacia
             </label>
@@ -115,7 +116,7 @@
 
           <div class="form-section">
             <label class="checkbox-group">
-              <input type="checkbox" name="newsletter" />
+              <input type="checkbox" name="newsletter" value="1" {{ (old('newsletter', $personal_data['newsletter'] ?? false)) ? 'checked' : '' }} />
               <span class="checkbox-group__checkmark"></span>
               Chcem dostávať novinky a ponuky na email
             </label>
@@ -123,7 +124,7 @@
 
           <div class="personal-info__actions">
             <a href="{{ route('checkout.payment') }}" class="btn btn--outline">Späť k platbe</a>
-            <a href="{{ route('checkout.summary') }}" class="btn btn--teal">Pokračovať k potvrdeniu</a>
+            <button type="submit" class="btn btn--teal">Pokračovať k potvrdeniu</button>
           </div>
 
         </form>

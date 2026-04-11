@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Category;
 
 class ProductController extends Controller
 {
@@ -11,18 +12,20 @@ class ProductController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        $products = Product::all();
-        return view('index', compact('products'));
-    }
+{
+    $products = Product::paginate(12);
+    $categories = Category::all();
+    return view('index', compact('products', 'categories'));
+}
 
 public function adminIndex()
     {
         $products = Product::all();
-        return view('admin-products', compact('products'))->with('hideLogout', false);
+        $categories = Category::all();
+        return view('admin-products', compact('products', 'categories'))->with('hideLogout', false);
     }
 
-    public function destroy(string $id)
+public function destroy(string $id)
 {
     Product::findOrFail($id)->delete();
     return response()->json(['success' => true]);
@@ -45,7 +48,9 @@ public function adminIndex()
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
+            'category_id' => 'required|exists:categories,id',
             'stock' => 'required|integer|min:0',
+            'sale_percent' => 'nullable|integer|min:0|max:100',
             ]);
 
         Product::create($validatedData);

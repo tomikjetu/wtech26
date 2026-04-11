@@ -7,6 +7,7 @@
     <div class="admin-meta" role="group" aria-label="Nastavenia produktu {{ $product->id }}">
         <button type="button" class="admin-meta-chip"><span>Cena: {{ $product->price }} EUR</span></button>
         <button type="button" class="admin-meta-chip"><span>Sklad: {{ $product->stock }} ks</span></button>
+        <button type="button" class="admin-meta-chip"><span>Kategorie: {{ $product->category->display_name }}</span></button>
     </div>
     <button type="button" class="admin-remove" aria-label="Odstranit produkt" onclick="deleteProduct({{ $product->id }})">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /></svg>

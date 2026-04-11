@@ -51,99 +51,80 @@
         <div class="cart__inner">
 
           <!-- Cart Items -->
-          <div class="cart__items">
-
-            <div class="cart-item">
-              <div class="cart-item__image">
+<div class="cart__items">
+    @forelse ($items as $key => $item)
+        @php
+            $product = Auth::check() ? $item->product : $item['product'];
+            $size    = Auth::check() ? $item->size : $item['size'];
+            $qty     = Auth::check() ? $item->quantity : $item['quantity'];
+            $itemId  = Auth::check() ? $item->id : null;
+        @endphp
+        <div class="cart-item">
+            <div class="cart-item__image">
                 <div class="cart-item__img cart-item__img--shirt-white"></div>
-              </div>
-              <div class="cart-item__info">
-                <h3 class="cart-item__name">TrickoHouse core</h3>
-                <p class="cart-item__variant">Biela, M</p>
-                <div class="cart-item__quantity">
-                  <button class="quantity-btn" aria-label="Decrease">-</button>
-                  <span class="quantity-value">1</span>
-                  <button class="quantity-btn" aria-label="Increase">+</button>
-                </div>
-              </div>
-              <div class="cart-item__price">
-                <span class="cart-item__price-value">24.99€</span>
-                <button class="cart-item__remove" aria-label="Remove item">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                </button>
-              </div>
             </div>
-
-            <div class="cart-item">
-              <div class="cart-item__image">
-                <div class="cart-item__img cart-item__img--hoodie-black"></div>
-              </div>
-              <div class="cart-item__info">
-                <h3 class="cart-item__name">Hoodie</h3>
-                <p class="cart-item__variant">Čierna, L</p>
-                <div class="cart-item__quantity">
-                  <button class="quantity-btn" aria-label="Decrease">-</button>
-                  <span class="quantity-value">2</span>
-                  <button class="quantity-btn" aria-label="Increase">+</button>
-                </div>
-              </div>
-              <div class="cart-item__price">
-                <span class="cart-item__price-value">59.99€</span>
-                <button class="cart-item__remove" aria-label="Remove item">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                </button>
-              </div>
+            <div class="cart-item__info">
+                <h3 class="cart-item__name">{{ $product->name }}</h3>
+                <p class="cart-item__variant">{{ $product->color }}, {{ $size?->name ?? 'N/A' }}</p>
+                <form method="POST" action="{{ route('cart.update') }}">
+                    @csrf
+                    <input type="hidden" name="item_id" value="{{ $itemId }}">
+                    <input type="hidden" name="key" value="{{ $key }}">
+                    <div class="cart-item__quantity">
+                        <button type="button" class="quantity-btn" onclick="changeCartQty(this, -1)">-</button>
+                        <input type="number" name="quantity" value="{{ $qty }}" min="1" style="width:40px;text-align:center;border:none;" onchange="this.form.submit()">
+                        <button type="button" class="quantity-btn" onclick="changeCartQty(this, 1)">+</button>
+                    </div>
+                </form>
             </div>
-
-            <div class="cart-item">
-              <div class="cart-item__image">
-                <div class="cart-item__img cart-item__img--cap-white"></div>
-              </div>
-              <div class="cart-item__info">
-                <h3 class="cart-item__name">Cap</h3>
-                <p class="cart-item__variant">Biela, One Size</p>
-                <div class="cart-item__quantity">
-                  <button class="quantity-btn" aria-label="Decrease">-</button>
-                  <span class="quantity-value">1</span>
-                  <button class="quantity-btn" aria-label="Increase">+</button>
-                </div>
-              </div>
-              <div class="cart-item__price">
-                <span class="cart-item__price-value">24.99€</span>
-                <button class="cart-item__remove" aria-label="Remove item">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                </button>
-              </div>
+            <div class="cart-item__price">
+                <span class="cart-item__price-value">{{ number_format($product->price * $qty, 2) }}€</span>
+                <form method="POST" action="{{ route('cart.remove') }}">
+                    @csrf
+                    <input type="hidden" name="item_id" value="{{ $itemId }}">
+                    <input type="hidden" name="key" value="{{ $key }}">
+                    <button type="submit" class="cart-item__remove" aria-label="Remove item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </form>
             </div>
-
-          </div>
-
-          <!-- Cart Summary -->
-          <div class="cart__summary">
-            <div class="cart-summary">
-              <h3 class="cart-summary__title">Súhrn objednávky</h3>
-
-              <div class="cart-summary__row">
-                <span>Medzisúčet</span>
-                <span>109.97€</span>
-              </div>
-
-              <div class="cart-summary__row">
-                <span>Doprava</span>
-                <span>0.00€</span>
-              </div>
-
-              <div class="cart-summary__row cart-summary__row--total">
-                <span>Celkom</span>
-                <span>109.97€</span>
-              </div>
-
-              <a href="{{ route('checkout.delivery') }}" class="btn btn--teal cart-summary__checkout">Pokračovať k pokladni</a>
-            </div>
-          </div>
-
         </div>
+    @empty
+        <p>Váš košík je prázdny.</p>
+    @endforelse
+</div>
+
+<!-- Cart Summary -->
+<div class="cart__summary">
+    <div class="cart-summary">
+        <h3 class="cart-summary__title">Súhrn objednávky</h3>
+        @php
+            global $total;
+            $total = collect($items)->sum(function($item) {
+                $product = Auth::check() ? $item->product : $item['product'];
+                $qty     = Auth::check() ? $item->quantity : $item['quantity'];
+                return $product->price * $qty;
+            });
+        @endphp
+        <div class="cart-summary__row">
+            <span>Medzisúčet</span>
+            <span>{{ number_format($total, 2) }}€</span>
+        </div>
+        <div class="cart-summary__row">
+            <span>Doprava</span>
+            <span>0.00€</span>
+        </div>
+        <div class="cart-summary__row cart-summary__row--total">
+            <span>Celkom</span>
+            <span>{{ number_format($total, 2) }}€</span>
+        </div>
+        @if ($total > 0)
+            <a href="{{ route('checkout.delivery') }}" class="btn btn--teal cart-summary__checkout">Pokračovať k pokladni</a>
+        @else
+            <a href="/" class="btn btn--teal cart-summary__checkout">Vrátiť se do obchodu</a>
+        @endif
       </div>
+</div>
     </section>
 
   </main>

@@ -49,71 +49,56 @@
             <div class="order-details__section">
               <h2 class="order-details__title">Objednané produkty</h2>
               <div class="order-items">
+                @forelse ($items as $item)
+                @php
+                    $product = Auth::check() ? $item->product : $item['product'];
+                    $size = Auth::check() ? $item->size : $item['size'];
+                    $qty = Auth::check() ? $item->quantity : $item['quantity'];
+                @endphp
                 <div class="order-item">
                   <div class="order-item__image">
                     <div class="order-item__img order-item__img--shirt-white"></div>
                   </div>
                   <div class="order-item__info">
-                    <h3 class="order-item__name">TrickoHouse core</h3>
-                    <p class="order-item__variant">Biela, M</p>
-                    <p class="order-item__quantity">Množstvo: 1</p>
+                    <h3 class="order-item__name">{{ $product->name }}</h3>
+                    <p class="order-item__variant">{{ $product->color }}, {{ $size?->name ?? 'N/A' }}</p>
+                    <p class="order-item__quantity">Množstvo: {{ $qty }}</p>
                   </div>
-                  <div class="order-item__price">24.99€</div>
+                  <div class="order-item__price">{{ number_format($product->price * $qty, 2) }}€</div>
                 </div>
-
-            <div class="order-item">
-              <div class="order-item__image">
-                <div class="order-item__img order-item__img--hoodie-black"></div>
+                @empty
+                <p>Váš košík je prázdny.</p>
+                @endforelse
               </div>
-              <div class="order-item__info">
-                <h3 class="order-item__name">Hoodie</h3>
-                <p class="order-item__variant">Čierna, L</p>
-                <p class="order-item__quantity">Množstvo: 2</p>
-              </div>
-              <div class="order-item__price">59.99€</div>
             </div>
-
-            <div class="order-item">
-              <div class="order-item__image">
-                <div class="order-item__img order-item__img--cap-white"></div>
-              </div>
-              <div class="order-item__info">
-                <h3 class="order-item__name">Cap</h3>
-                <p class="order-item__variant">Biela, One Size</p>
-                <p class="order-item__quantity">Množstvo: 1</p>
-              </div>
-              <div class="order-item__price">24.99€</div>
-            </div>
-          </div>
-        </div>
 
         <div class="order-details__grid">
 
           <div class="order-details__section">
             <h2 class="order-details__title">Dodacia adresa</h2>
             <div class="address-info">
-              <p>Ján Novák</p>
-              <p>Hlavná ulica 123</p>
-              <p>Bratislava 811 01</p>
-              <p>Slovensko</p>
-              <p>jan.novak@email.com</p>
-              <p>+421 123 456 789</p>
+              <p>{{ $checkout_data['personal_data']['firstName'] ?? '' }} {{ $checkout_data['personal_data']['lastName'] ?? '' }}</p>
+              <p>{{ $checkout_data['personal_data']['address'] ?? '' }}</p>
+              <p>{{ $checkout_data['personal_data']['city'] ?? '' }} {{ $checkout_data['personal_data']['zip'] ?? '' }}</p>
+              <p>{{ $checkout_data['personal_data']['country'] == 'SK' ? 'Slovensko' : 'Česká republika' }}</p>
+              <p>{{ $checkout_data['personal_data']['email'] ?? '' }}</p>
+              <p>{{ $checkout_data['personal_data']['phone'] ?? '' }}</p>
             </div>
           </div>
 
           <div class="order-details__section">
             <h2 class="order-details__title">Spôsob dopravy</h2>
             <div class="shipping-info">
-              <p><strong>Štandardná doprava</strong></p>
+              <p><strong>{{ $checkout_data['delivery_title'] ?? 'Nezvolené' }}</strong></p>
               <p>Doručenie do 3-5 pracovných dní</p>
-              <p class="shipping-price">4.99€</p>
+              <p class="shipping-price">{{ number_format($checkout_data['delivery_price'] ?? 0, 2) }}€</p>
             </div>
           </div>
 
           <div class="order-details__section">
             <h2 class="order-details__title">Spôsob platby</h2>
             <div class="payment-info">
-              <p><strong>Kreditná/debetná karta</strong></p>
+              <p><strong>{{ $checkout_data['payment_title'] ?? 'Nezvolené' }}</strong></p>
               <p>Visa, MasterCard, Maestro</p>
             </div>
           </div>
@@ -123,15 +108,15 @@
             <div class="order-summary-box">
               <div class="order-summary-box__row">
                 <span>Medzisúčet</span>
-                <span>109.97€</span>
+                <span>{{ number_format($total, 2) }}€</span>
               </div>
               <div class="order-summary-box__row">
                 <span>Doprava</span>
-                <span>4.99€</span>
+                <span>{{ number_format($checkout_data['delivery_price'] ?? 0, 2) }}€</span>
               </div>
               <div class="order-summary-box__row order-summary-box__row--total">
                 <span>Celkom</span>
-                <span>114.96€</span>
+                <span>{{ number_format($total + ($checkout_data['delivery_price'] ?? 0), 2) }}€</span>
               </div>
             </div>
           </div>
@@ -141,7 +126,10 @@
       </div>
 
       <div class="order-confirmation__actions">
-        <a href="{{ route('checkout.confirmation') }}" class="btn btn--teal">POTVRDIŤ OBJEDNÁVKU</a>
+        <form method="POST" action="{{ route('checkout.confirm.post') }}">
+          @csrf
+          <button type="submit" class="btn btn--teal">POTVRDIŤ OBJEDNÁVKU</button>
+        </form>
       </div>
 
     </div>

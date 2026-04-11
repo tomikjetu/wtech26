@@ -48,10 +48,12 @@
       <div class="container">
         <h1 class="section__title">Vyberte spôsob platby</h1>
 
-        <div class="payment-methods__grid">
+        <form method="POST" action="{{ route('checkout.payment.post') }}">
+          @csrf
+          <div class="payment-methods__grid">
 
           <label class="payment-method">
-            <input type="radio" name="payment" value="card" checked />
+            <input type="radio" name="payment" value="card" {{ ($payment_method ?? 'card') == 'card' ? 'checked' : '' }} />
             <div class="payment-method__content">
               <div class="payment-method__icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
@@ -64,7 +66,7 @@
           </label>
 
           <label class="payment-method">
-            <input type="radio" name="payment" value="bank" />
+            <input type="radio" name="payment" value="bank" {{ ($payment_method ?? '') == 'bank' ? 'checked' : '' }} />
             <div class="payment-method__content">
               <div class="payment-method__icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V3h18v18H3z"/><path d="M7 21V9h10v12"/></svg>
@@ -77,7 +79,7 @@
           </label>
 
           <label class="payment-method">
-            <input type="radio" name="payment" value="cash" />
+            <input type="radio" name="payment" value="cash" {{ ($payment_method ?? '') == 'cash' ? 'checked' : '' }} />
             <div class="payment-method__content">
               <div class="payment-method__icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
@@ -93,8 +95,9 @@
 
         <div class="payment-methods__actions">
           <a href="{{ route('checkout.delivery') }}" class="btn btn--outline">Späť k doprave</a>
-          <a href="{{ route('checkout.personal') }}" class="btn btn--teal">Pokračovať k údajom</a>
+          <button type="submit" class="btn btn--teal">Pokračovať k údajom</button>
         </div>
+        </form>
       </div>
     </section>
 

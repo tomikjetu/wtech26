@@ -27,7 +27,10 @@
               Používateľské meno
             @endauth
           </p>
-          <a href="/logout" class="profile-logout">Odhlásiť sa</a>
+          <a href="#" onclick="document.getElementById('logout-form').submit();" class="profile-logout">Odhlásiť sa</a>
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+          </form>
         </div>
       </div>
 
@@ -73,6 +76,104 @@
         </div>
 
         <p class="profile-wide-text">MOJE NÁKUPY: sledujte stav zásielok, pozrite si minulé objednávky a spravujte fakturačné informácie.</p>
+
+        @if($orders->count() > 0)
+          <div class="orders-list">
+            @foreach($orders as $order)
+            <div class="order-card">
+              <div class="order-header">
+                <div class="order-info">
+                  <h3 class="order-number">Objednávka #TRK-{{ str_pad($order->id, 4, '0', STR_PAD_LEFT) }}</h3>
+                  <p class="order-date">{{ $order->created_at->format('d.m.Y H:i') }}</p>
+                  <p class="order-status status-{{ $order->status }}">
+                    @switch($order->status)
+                      @case('pending')
+                        Čaká na spracovanie
+                        @break
+                      @case('confirmed')
+                        Potvrdená
+                        @break
+                      @case('shipped')
+                        Odoslaná
+                        @break
+                      @case('delivered')
+                        Doručená
+                        @break
+                      @case('cancelled')
+                        Zrušená
+                        @break
+                      @default
+                        {{ $order->status }}
+                    @endswitch
+                  </p>
+                </div>
+                <div class="order-total">
+                  <span class="total-amount">{{ number_format($order->total_amount, 2) }}€</span>
+                </div>
+              </div>
+
+              <div class="order-items">
+                @foreach($order->items as $item)
+                <div class="order-item">
+                  <div class="item-image">
+                    <div class="item-placeholder"></div>
+                  </div>
+                  <div class="item-details">
+                    <h4 class="item-name">{{ $item->product_name }}</h4>
+                    <p class="item-variant">
+                      {{ $item->product_color }}
+                      @if($item->size_name)
+                        , {{ $item->size_name }}
+                      @endif
+                    </p>
+                    <p class="item-quantity">Počet: {{ $item->quantity }}</p>
+                  </div>
+                  <div class="item-price">
+                    {{ number_format($item->price * $item->quantity, 2) }}€
+                  </div>
+                </div>
+                @endforeach
+              </div>
+
+              <div class="order-footer">
+                <div class="order-summary">
+                  <div class="summary-row">
+                    <span>Medzisúčet:</span>
+                    <span>{{ number_format($order->subtotal, 2) }}€</span>
+                  </div>
+                  <div class="summary-row">
+                    <span>Doprava ({{ $order->delivery_title }}):</span>
+                    <span>{{ number_format($order->delivery_price, 2) }}€</span>
+                  </div>
+                  <div class="summary-row summary-total">
+                    <span>Celkom:</span>
+                    <span>{{ number_format($order->total_amount, 2) }}€</span>
+                  </div>
+                </div>
+                <div class="order-actions">
+                  <a href="{{ route('order.detail', $order->id) }}" class="btn btn--outline btn--small">Zobraziť detaily</a>
+                  @if($order->status === 'confirmed' || $order->status === 'pending')
+                    <button class="btn btn--outline btn--small">Zrušiť objednávku</button>
+                  @endif
+                </div>
+              </div>
+            </div>
+            @endforeach
+          </div>
+        @else
+          <div class="empty-orders">
+            <div class="empty-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1"/>
+                <circle cx="20" cy="21" r="1"/>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+              </svg>
+            </div>
+            <h3 class="empty-title">Žiadne objednávky</h3>
+            <p class="empty-text">Zatiaľ ste neurobili žiadnu objednávku. Začnite nakupovať!</p>
+            <a href="{{ route('home') }}" class="btn btn--teal">Začať nakupovať</a>
+          </div>
+        @endif
 
       </div>
     </section>

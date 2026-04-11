@@ -453,10 +453,12 @@ img {
 }
 
 .category-card__img {
-  width: 44px;
-  height: 44px;
-  border-radius: 2px;
-  flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    background-size: cover;
+    background-position: center;
+    border-radius: var(--radius);
+    flex-shrink: 0;
 }
 
 .sort-control {
@@ -482,24 +484,12 @@ img {
 
 /* Temporary - nahradit ked bude databaza - mat to krajsie pomenovane */
 
-.category-card__img--muzi {
-  background: #d0ccc8;
-}
-.category-card__img--zeny {
-  background: #e8d4d0;
-}
-.category-card__img--oblecenie {
-  background: #cfd0cc;
-}
-.category-card__img--topanky {
-  background: #5b8fc4;
-}
-.category-card__img--vypredaj {
-  background: #e05c3a;
-}
-.category-card__img--doplnky {
-  background: #8bc47a;
-}
+.category-card__img--men         { background-image: url('../images/categories/men.png'); }
+.category-card__img--women       { background-image: url('../images/categories/women.png'); }
+.category-card__img--clothing    { background-image: url('../images/categories/clothing.png'); }
+.category-card__img--shoes       { background-image: url('../images/categories/shoes.png'); }
+.category-card__img--sale        { background-image: url('../images/categories/sale.png'); }
+.category-card__img--accessories { background-image: url('../images/categories/accessories.png'); }
 
 /* ============================================================
    PRODUCT CAROUSELS

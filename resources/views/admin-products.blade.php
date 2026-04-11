@@ -83,18 +83,10 @@
               <label>Kategória *</label>
             </div>
             <div class="admin-category-grid">
-              <input type="radio" class="admin-category-option" name="category" id="cat-muzi" value="muzi" />
-              <label class="admin-btn" for="cat-muzi">Muži</label>
-              <input type="radio" class="admin-category-option" name="category" id="cat-zeny" value="zeny" />
-              <label class="admin-btn" for="cat-zeny">Ženy</label>
-              <input type="radio" class="admin-category-option" name="category" id="cat-oblecenie" value="oblecenie" />
-              <label class="admin-btn" for="cat-oblecenie">Oblečenie</label>
-              <input type="radio" class="admin-category-option" name="category" id="cat-topanky" value="topanky" />
-              <label class="admin-btn" for="cat-topanky">Topánky</label>
-              <input type="radio" class="admin-category-option" name="category" id="cat-vypredaj" value="vypredaj" />
-              <label class="admin-btn" for="cat-vypredaj">Výpredaj</label>
-              <input type="radio" class="admin-category-option" name="category" id="cat-doplnky" value="doplnky" />
-              <label class="admin-btn" for="cat-doplnky">Doplnky</label>
+              @foreach($categories as $category)
+              <input type="radio" class="admin-category-input" name="category_id" id="category-{{ $category->id }}" value="{{ $category->id }}" required />
+              <label class="admin-btn" for="category-{{ $category->id }}">{{ $category->display_name }}</label>
+              @endforeach
             </div>
             <span class="admin-form-error" id="categoryError"></span>
           </div>

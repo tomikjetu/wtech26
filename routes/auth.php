@@ -16,8 +16,19 @@ Route::middleware('guest')->group(function () {
             'password' => ['required'],
         ]);
 
+        // First try to authenticate as admin
+        if (Auth::guard('admin')->attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect('/admin/products');
+        }
+
+        // If not admin, try regular user authentication
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+            
+            // Transfer session cart to user
+            \App\Http\Controllers\CartController::transferSessionCartToUser(Auth::id());
+            
             $token = bin2hex(random_bytes(32)); // Custom token for cookie
             return redirect('/profil')->cookie('auth_token', $token, 60*24*30);
         }
@@ -50,10 +61,16 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profil', function () {
-        return view('profile');
-    })->name('profile');
+    Route::post('/logout', function (Request $request) {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/')->withoutCookie('auth_token');
+    })->name('logout');
+});
 
+Route::middleware('auth')->group(function () {
+    // Profile route is now handled in web.php
     Route::get('/logout', function (Request $request) {
         Auth::logout();
         $request->session()->invalidate();
