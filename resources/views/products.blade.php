@@ -198,11 +198,13 @@
     <p>Žiadne produkty.</p>
 @endforelse
 
-{{ $products->links() }}
 
           </div><!-- /.products-listing -->
 
         </div><!-- /.listing-body -->
+
+          {{ $products->links("vendor.pagination.bootstrap-4") }}
+
       </div><!-- /.listing-wrapper -->
 
     </div><!-- /.container -->
