@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Http\Controllers\ProductController;
 use App\Models\Sizes;
+use Illuminate\Support\Facades\Auth;
 
 /* ─────────────────────────────────── HOMEPAGE ──────────────────────────────── */
 
@@ -58,7 +59,8 @@ Route::get('/produkty/kategoria/{slug}', function (string $slug) {
     $category = Category::where('name', $slug)->firstOrFail();
     $activeFilters = request()->only(['price_min', 'price_max', 'colors', 'sizes']);
 
-    $products = Product::when(request('price_min'), fn($q) => $q->where('price', '>=', request('price_min')))
+    $products = Product::where('category_id', $category->id)
+                   ->when(request('price_min'), fn($q) => $q->where('price', '>=', request('price_min')))
                    ->when(request('price_max'), fn($q) => $q->where('price', '<=', request('price_max')))
                    ->when(request('colors'), fn($q) => $q->whereIn('color', request('colors')))
                    ->when(request('sizes'), fn($q) => $q->whereHas('sizes', fn($q) => $q->whereIn('name', request('sizes'))))

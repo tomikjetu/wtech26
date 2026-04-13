@@ -1,19 +1,17 @@
 @php
-    $cartCount  = 2; // session('art_count', 0);
+  $cartCount  = $cartCount ?? 0;
     $notifCount = 1;
+  $categories = \App\Models\Category::orderBy('id')->get();
 
     $isProductsCat = request()->routeIs('products.category');
     $catSlug       = $isProductsCat ? request()->route('slug') : null;
 
     $isAllProducts = request()->routeIs('products.all')
                   || request()->routeIs('products.featured')
-                  || request()->routeIs('products.search')
-                  || ($isProductsCat && ! in_array($catSlug, ['muzi', 'zeny', 'tricka', 'mikiny']));
+          || request()->routeIs('products.search');
 
-    $isMuzi   = $isProductsCat && $catSlug === 'muzi';
-    $isZeny   = $isProductsCat && $catSlug === 'zeny';
-    $isTricka = $isProductsCat && $catSlug === 'tricka';
-    $isMikiny = $isProductsCat && $catSlug === 'mikiny';
+    $isMuzi   = $isProductsCat && $catSlug === 'men';
+    $isZeny   = $isProductsCat && $catSlug === 'women';
 @endphp
 
   <!-- ===== TOP NAV ===== -->
@@ -22,8 +20,8 @@
 
       <nav class="top-nav__links">
         <a href="{{ route('products.all') }}"              class="top-nav__link {{ $isAllProducts ? 'active' : '' }}">VŠETKO</a>
-        <a href="{{ route('products.category', 'muzi') }}" class="top-nav__link {{ $isMuzi  ? 'active' : '' }}">MUŽ</a>
-        <a href="{{ route('products.category', 'zeny') }}" class="top-nav__link {{ $isZeny  ? 'active' : '' }}">ŽENA</a>
+        <a href="{{ route('products.category', 'men') }}" class="top-nav__link {{ $isMuzi  ? 'active' : '' }}">MUŽ</a>
+        <a href="{{ route('products.category', 'women') }}" class="top-nav__link {{ $isZeny  ? 'active' : '' }}">ŽENA</a>
       </nav>
 
       <a href="{{ route('home') }}" class="top-nav__logo">trickohouse</a>
@@ -57,8 +55,9 @@
   <nav class="sec-nav">
     <div class="container sec-nav__inner">
       <div class="sec-nav__left">
-        <a href="{{ route('products.category', 'tricka') }}" class="sec-nav__link {{ $isTricka ? 'active' : '' }}">Tričká</a>
-        <a href="{{ route('products.category', 'mikiny') }}" class="sec-nav__link {{ $isMikiny ? 'active' : '' }}">Mikiny</a>
+        @foreach ($categories as $category)
+          <a href="{{ route('products.category', $category->name) }}" class="sec-nav__link {{ $isProductsCat && $catSlug === $category->name ? 'active' : '' }}">{{ mb_strtoupper($category->display_name) }}</a>
+        @endforeach
       </div>
       <form class="sec-nav__search" data-search-base="{{ url('/produkty/hladat') }}" action="#" onsubmit="return false;">
         <input type="text" placeholder="Vyhľadať..." aria-label="Vyhľadať" />

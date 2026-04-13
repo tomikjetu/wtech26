@@ -167,7 +167,7 @@
             @if ($product->price && $product->sale_percent > 0)
                 <span class="product-card__price--original">{{ number_format($product->price, 2) }}€</span>
             @endif
-            {{ number_format($product->price, 2) }}€
+            {{ number_format($product->price - ($product->price * $product->sale_percent / 100), 2) }}€
         </p>
     </a>
 @empty
