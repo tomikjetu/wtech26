@@ -5,6 +5,105 @@ All base/card/nav/footer styles live in style.css
 ============================================================ */
 
 /* ============================================================
+SORT DROPDOWN — custom select inside .listing-header (dark bar)
+60% dark bg · 30% semi-white surfaces · 10% warm-white accent
+============================================================ */
+.sort-dropdown {
+  position: relative;
+}
+
+/* Trigger button */
+.sort-dropdown__trigger {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 10px 5px 12px;
+  background: rgba(255,255,255,.08);    /* 30% secondary surface */
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,.85);
+  white-space: nowrap;
+  transition: background .15s, border-color .15s;
+  height: 32px;
+}
+.sort-dropdown__trigger:hover,
+.sort-dropdown__trigger[aria-expanded="true"] {
+  background: rgba(255,255,255,.14);
+  border-color: rgba(255,255,255,.32);
+}
+
+/* Chevron icon */
+.sort-dropdown__chevron {
+  color: rgba(255,255,255,.45);
+  flex-shrink: 0;
+  transition: transform .2s, color .15s;
+}
+.sort-dropdown__trigger[aria-expanded="true"] .sort-dropdown__chevron {
+  transform: rotate(180deg);
+  color: rgba(255,255,255,.75);
+}
+
+/* Dropdown panel */
+.sort-dropdown__menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 180px;
+  background: #333;                      /* slightly lighter than --dark */
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 24px rgba(0,0,0,.5);
+  overflow: hidden;
+  z-index: 200;
+  padding: 4px 0;
+  animation: sort-drop-in .15s ease;
+}
+.sort-dropdown__menu.sort-dropdown__menu--open {
+  display: block;
+}
+
+@keyframes sort-drop-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* Option items */
+.sort-dropdown__option {
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,.7);
+  cursor: pointer;
+  transition: background .12s, color .12s;
+  letter-spacing: .02em;
+}
+.sort-dropdown__option:hover {
+  background: rgba(255,255,255,.08);
+  color: var(--white);
+}
+/* 10% accent — active/selected option */
+.sort-dropdown__option--active {
+  background: rgba(255,255,255,.14);
+  color: var(--white);
+  position: relative;
+}
+.sort-dropdown__option--active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  border-radius: 0 2px 2px 0;
+  background: rgba(255,255,255,.6);     /* warm-white accent stripe */
+}
+
+/* ============================================================
 LISTING WRAPPER — outer container with margin-top
 ============================================================ */
 .listing-wrapper {

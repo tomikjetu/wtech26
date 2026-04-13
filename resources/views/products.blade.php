@@ -54,12 +54,36 @@
             </form>
 
             <div class="sort-control">
-              <label for="sortSelect">Zoradiť:</label>
-              <select id="sortSelect">
-    <option value="default" {{ request('sort', 'default') == 'default' ? 'selected' : '' }}>Odporúčané</option>
-    <option value="price-asc" {{ request('sort') == 'price-asc' ? 'selected' : '' }}>Cena: od najnižšej</option>
-    <option value="price-desc" {{ request('sort') == 'price-desc' ? 'selected' : '' }}>Cena: od najvyššej</option>
-          </select>
+              <span class="sort-control__label">Zoradiť:</span>
+              <div class="sort-dropdown" id="sortDropdown">
+                <button type="button" class="sort-dropdown__trigger" id="sortTrigger"
+                        aria-haspopup="listbox" aria-expanded="false">
+                  <span class="sort-dropdown__current" id="sortCurrent">
+                    @php
+                      $sortLabels = [
+                        'default'    => 'Odporúčané',
+                        'price-asc'  => 'Cena: od najnižšej',
+                        'price-desc' => 'Cena: od najvyššej',
+                      ];
+                      echo $sortLabels[request('sort', 'default')] ?? 'Odporúčané';
+                    @endphp
+                  </span>
+                  <svg class="sort-dropdown__chevron" xmlns="http://www.w3.org/2000/svg"
+                       width="12" height="12" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2.5"
+                       stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+                </button>
+                <ul class="sort-dropdown__menu" id="sortMenu" role="listbox">
+                  <li class="sort-dropdown__option {{ request('sort', 'default') == 'default' ? 'sort-dropdown__option--active' : '' }}"
+                      data-value="default" role="option">Odporúčané</li>
+                  <li class="sort-dropdown__option {{ request('sort') == 'price-asc' ? 'sort-dropdown__option--active' : '' }}"
+                      data-value="price-asc" role="option">Cena: od najnižšej</li>
+                  <li class="sort-dropdown__option {{ request('sort') == 'price-desc' ? 'sort-dropdown__option--active' : '' }}"
+                      data-value="price-desc" role="option">Cena: od najvyššej</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
