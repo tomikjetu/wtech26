@@ -288,6 +288,8 @@ Route::middleware('auth:admin')->group(function () {
     Route::post('/admin/products', [ProductController::class, 'store'])
         ->name('products.store');
 
+    Route::post('/admin/products/{id}', [ProductController::class, 'update'])->name('products.update');
+
     Route::delete('/admin/products/{id}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
 
     Route::get('/admin/orders', fn () => view('admin-orders',['hideLogout' => false]))
