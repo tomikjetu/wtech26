@@ -1,3 +1,9 @@
+function switchImage(thumbnail, src) {
+    document.getElementById('mainProductImage').src = src;
+    document.querySelectorAll('.product-detail__thumbnail').forEach(t => t.classList.remove('active'));
+    thumbnail.classList.add('active');
+}
+
 function selectSize(btn) {
     document.querySelectorAll('.product-detail__size').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');

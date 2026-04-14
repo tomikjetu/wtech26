@@ -13,14 +13,14 @@ class ProductController extends Controller
      */
     public function index()
 {
-    $products = Product::paginate(12);
+    $products = Product::with('images')->paginate(12);
     $categories = Category::all();
     return view('index', compact('products', 'categories'));
 }
 
 public function adminIndex()
     {
-        $products = Product::all();
+        $products = Product::with(['images', 'category'])->get();
         $categories = Category::all();
         return view('admin-products', compact('products', 'categories'))->with('hideLogout', false);
     }

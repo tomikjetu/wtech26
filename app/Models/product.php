@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\sizes;
+use App\Models\ProductImage;
 
 class product extends Model
 {
@@ -31,5 +32,9 @@ class product extends Model
 // Size.php
 public function products() {
     return $this->belongsToMany(Product::class);
+}
+
+public function images() {
+    return $this->hasMany(ProductImage::class)->orderBy('sort_order');
 }
 }

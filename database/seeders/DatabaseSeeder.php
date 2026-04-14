@@ -9,6 +9,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\sizes;
+use App\Models\ProductImage;
 
 class DatabaseSeeder extends Seeder
 {
@@ -86,8 +87,23 @@ foreach ($products as $data) {
     $product->sizes()->attach([1, 2, 3, 4]); // XS, S, M, L
 }
 
-    
+        $allImages = [
+            'images/products/shirt.jpg',
+            'images/products/shirt-2.jpg',
+            'images/products/hoodie.jpg',
+            'images/products/sweater.jpg',
+            'images/products/bag.jpg',
+        ];
 
-        
+        foreach (Product::all() as $product) {
+            $picked = collect($allImages)->shuffle()->take(2);
+            foreach ($picked as $order => $path) {
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'path'       => $path,
+                    'sort_order' => $order,
+                ]);
+            }
+        }
     }
 }

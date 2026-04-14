@@ -178,25 +178,10 @@
           <div class="products-listing">
 
             @forelse ($products as $product)
-    <a href="{{ route('product.detail', $product->id) }}" class="product-card product-card--grid">
-        <div class="product-card__img product-card__img--shirt-white"></div>
-
-        @if ($product->sale_percent)
-            <span class="badge badge--sale">-{{ $product->sale_percent }}%</span>
-        @endif
-
-        
-        <p class="product-card__name">{{ $product->name }}</p>
-        <p class="product-card__price">
-            @if ($product->price && $product->sale_percent > 0)
-                <span class="product-card__price--original">{{ number_format($product->price, 2) }}€</span>
-            @endif
-            {{ number_format($product->price - ($product->price * $product->sale_percent / 100), 2) }}€
-        </p>
-    </a>
-@empty
-    <p>Žiadne produkty.</p>
-@endforelse
+                @include('include.product-card', ['cardClass' => 'product-card--grid'])
+            @empty
+                <p>Žiadne produkty.</p>
+            @endforelse
 
 
           </div><!-- /.products-listing -->

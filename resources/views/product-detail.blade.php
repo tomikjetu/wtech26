@@ -20,12 +20,25 @@
         <div class="product-detail__inner">
           
           <div class="product-detail__image">
-            <div class="product-detail__img product-detail__img--shirt-white"></div>
-            <div class="product-detail__thumbnails">
-              <div class="product-detail__thumbnail active product-detail__img--shirt-white"></div>
-              <div class="product-detail__thumbnail product-detail__img--shirt-white"></div>
-              <div class="product-detail__thumbnail product-detail__img--shirt-white"></div>
-            </div>
+            @if ($product->images->isNotEmpty())
+              <div class="product-detail__img product-detail__img--photo">
+                <img id="mainProductImage"
+                     src="{{ asset($product->images->first()->path) }}"
+                     alt="{{ $product->name }}" />
+              </div>
+              @if ($product->images->count() > 1)
+                <div class="product-detail__thumbnails">
+                  @foreach ($product->images as $i => $img)
+                    <div class="product-detail__thumbnail product-detail__thumbnail--photo {{ $i === 0 ? 'active' : '' }}"
+                         onclick="switchImage(this, '{{ asset($img->path) }}')">
+                      <img src="{{ asset($img->path) }}" alt="{{ $product->name }} {{ $i + 1 }}" />
+                    </div>
+                  @endforeach
+                </div>
+              @endif
+            @else
+              <div class="product-detail__img product-detail__img--shirt-white"></div>
+            @endif
           </div>
 
           <div class="product-detail__info">

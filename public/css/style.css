@@ -553,8 +553,9 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
 }
-
 .product-card__img--shirt-white {
   background: #f0f0f0;
 }
@@ -577,6 +578,17 @@ img {
   font-size: 12px;
   letter-spacing: 0.04em;
   opacity: 0.35;
+  position: absolute;
+  pointer-events: none;
+}
+.product-card__img--photo::after {
+  display: none;
+}
+.product-card__img--photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 .product-card__img--shirt-white::after,
 .product-card__img--cap-white::after {

@@ -1,5 +1,9 @@
 <article class="admin-row">
-    <div class="admin-thumb" aria-hidden="true"></div>
+    <div class="admin-thumb" aria-hidden="true">
+        @if ($product->images->isNotEmpty())
+            <img src="{{ asset($product->images->first()->path) }}" alt="{{ $product->name }}" />
+        @endif
+    </div>
     <div class="admin-id">
         <label class="sr-only" for="name-{{ $product->id }}">Nazov produktu</label>
         <input id="name-{{ $product->id }}" type="text" value="{{ $product->name }}" />

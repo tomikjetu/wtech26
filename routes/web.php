@@ -18,7 +18,8 @@ Route::get('/', [ProductController::class, 'index'])->name('home');
 Route::get('/produkty', function () {
     $activeFilters = request()->only(['price_min', 'price_max', 'colors', 'sizes']);
 
-    $products = Product::when(request('price_min'), fn($q) => $q->where('price', '>=', request('price_min')))
+    $products = Product::with('images')
+                        ->when(request('price_min'), fn($q) => $q->where('price', '>=', request('price_min')))
                         ->when(request('price_max'), fn($q) => $q->where('price', '<=', request('price_max')))
                         ->when(request('colors'), fn($q) => $q->whereIn('color', request('colors')))
                         ->when(request('sizes'), fn($q) => $q->whereHas('sizes', fn($q) => $q->whereIn('name', request('sizes'))))
@@ -40,7 +41,7 @@ Route::get('/produkty', function () {
 })->name('products.all');
 
 Route::get('/produkty/odporucane', function () {
-    $products = Product::where('sale_percent', '>', 0)->paginate(12);
+    $products = Product::with('images')->where('sale_percent', '>', 0)->paginate(12);
 
     return view('products', [
         'products'         => $products,
@@ -59,7 +60,8 @@ Route::get('/produkty/kategoria/{slug}', function (string $slug) {
     $category = Category::where('name', $slug)->firstOrFail();
     $activeFilters = request()->only(['price_min', 'price_max', 'colors', 'sizes']);
 
-    $products = Product::where('category_id', $category->id)
+    $products = Product::with('images')
+                   ->where('category_id', $category->id)
                    ->when(request('price_min'), fn($q) => $q->where('price', '>=', request('price_min')))
                    ->when(request('price_max'), fn($q) => $q->where('price', '<=', request('price_max')))
                    ->when(request('colors'), fn($q) => $q->whereIn('color', request('colors')))
@@ -82,7 +84,8 @@ Route::get('/produkty/kategoria/{slug}', function (string $slug) {
 })->name('products.category');
 
 Route::get('/produkty/hladat/{query}', function (string $query) {
-    $products = Product::where('name', 'ilike', '%' . $query . '%')
+    $products = Product::with('images')
+                       ->where('name', 'ilike', '%' . $query . '%')
                        ->orWhere('description', 'ilike', '%' . $query . '%')
                        ->paginate(12);
 
@@ -100,7 +103,7 @@ Route::get('/produkty/hladat/{query}', function (string $query) {
 })->name('products.search');
 
 Route::get('/produkty/{id}', function (int $id) {
-    $product = Product::findOrFail($id);
+    $product = Product::with(['images', 'sizes'])->findOrFail($id);
     return view('product-detail', ['product' => $product]);
 })->name('product.detail');
 /* ────────────────────────────── CART & CHECKOUT ────────────────────────────── */
