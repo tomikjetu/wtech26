@@ -24,8 +24,8 @@
         <div class="listing-header">
           <span class="listing-header__count">
             @php
-              $c = count($products);
-              $label = $c === 1 ? 'produkt' : ($c < 5 ? 'produkty' : 'produktov');
+              $c = method_exists($products, 'total') ? $products->total() : count($products);
+              $label = $c === 1 ? 'produkt' : ($c >= 2 && $c <= 4 ? 'produkty' : 'produktov');
             @endphp
             {{ $c }} {{ $label }}
             @if ($mode === 'featured')
@@ -160,15 +160,25 @@
 
             <!-- Price range filter -->
             <div class="filter-group">
-              <h3 class="filter-group__title">Cena do</h3>
+              <h3 class="filter-group__title">Cena</h3>
               <div class="filter-range">
                 <div class="filter-range__value">
-                  <span id="priceMaxDisplay">{{ $activeFilters['price_max'] ?? 100 }}€</span>
+                  <span id="priceMinDisplay">{{ $activeFilters['price_min'] ?? ($priceBounds['min'] ?? 0) }}€</span>
+                  -
+                  <span id="priceMaxDisplay">{{ $activeFilters['price_max'] ?? ($priceBounds['max'] ?? 100) }}€</span>
                 </div>
-                <input type="range" id="priceMax" name="price_max"
-                      class="filter-range__slider"
-                      min="0" max="100" step="1"
-                      value="{{ $activeFilters['price_max'] ?? 100 }}" />
+                <input type="hidden" id="priceMin" name="price_min" value="{{ $activeFilters['price_min'] ?? ($priceBounds['min'] ?? 0) }}" />
+                <input type="hidden" id="priceMax" name="price_max" value="{{ $activeFilters['price_max'] ?? ($priceBounds['max'] ?? 100) }}" />
+                <div class="filter-range__track-wrap"
+                     id="priceRange"
+                     data-min="{{ $priceBounds['min'] ?? 0 }}"
+                     data-max="{{ $priceBounds['max'] ?? 100 }}"
+                     data-step="1">
+                  <div class="filter-range__track"></div>
+                  <div class="filter-range__selected" id="priceSelectedTrack"></div>
+                  <button type="button" class="filter-range__handle filter-range__handle--min" id="priceMinHandle" aria-label="Minimálna cena"></button>
+                  <button type="button" class="filter-range__handle filter-range__handle--max" id="priceMaxHandle" aria-label="Maximálna cena"></button>
+                </div>
               </div>
             </div>
 

@@ -65,28 +65,81 @@ document.addEventListener('DOMContentLoaded', () => {
       cb.addEventListener('change', () => filterForm.submit());
     });
 
-    // Range slider: sync display label + fill gradient + debounced submit
-    const maxSlider  = document.getElementById('priceMax');
-    const maxDisplay = document.getElementById('priceMaxDisplay');
-    let rangeTimer;
+    // Dual-handle price range slider
+    const rangeWrap     = document.getElementById('priceRange');
+    if (rangeWrap) {
+      const minHandle     = document.getElementById('priceMinHandle');
+      const maxHandle     = document.getElementById('priceMaxHandle');
+      const selectedTrack = document.getElementById('priceSelectedTrack');
+      const minInput      = document.getElementById('priceMin');
+      const maxInput      = document.getElementById('priceMax');
+      const minDisplay    = document.getElementById('priceMinDisplay');
+      const maxDisplay    = document.getElementById('priceMaxDisplay');
 
-    function syncRange(slider) {
-      if (!slider) return;
-      const val = parseInt(slider.value, 10);
-      const min = parseInt(slider.min, 10) || 0;
-      const max = parseInt(slider.max, 10) || 100;
-      const pct = ((val - min) / (max - min)) * 100;
-      slider.style.setProperty('--fill', pct + '%');
-      if (maxDisplay) maxDisplay.textContent = val + '€';
-    }
+      const boundsMin = parseFloat(rangeWrap.dataset.min) || 0;
+      const boundsMax = parseFloat(rangeWrap.dataset.max) || 100;
+      const step      = parseFloat(rangeWrap.dataset.step) || 1;
 
-    if (maxSlider) {
-      maxSlider.addEventListener('input', function () {
-        syncRange(this);
-        clearTimeout(rangeTimer);
-        rangeTimer = setTimeout(() => filterForm.submit(), 500);
-      });
-      syncRange(maxSlider);
+      let curMin = parseFloat(minInput.value) || boundsMin;
+      let curMax = parseFloat(maxInput.value) || boundsMax;
+      let debounceTimer = null;
+
+      function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+      function snap(v) { return Math.round(v / step) * step; }
+      function pctOf(v) { return ((v - boundsMin) / (boundsMax - boundsMin)) * 100; }
+
+      function render() {
+        const lo = pctOf(curMin), hi = pctOf(curMax);
+        minHandle.style.left     = lo + '%';
+        maxHandle.style.left     = hi + '%';
+        selectedTrack.style.left  = lo + '%';
+        selectedTrack.style.width = (hi - lo) + '%';
+        minInput.value            = curMin;
+        maxInput.value            = curMax;
+        if (minDisplay) minDisplay.textContent = curMin + '€';
+        if (maxDisplay) maxDisplay.textContent = curMax + '€';
+      }
+
+      function scheduleSubmit(delay) {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => filterForm.submit(), delay ?? 1200);
+      }
+
+      function startDrag(isMin, e) {
+        e.preventDefault();
+        const isTouch = e.type === 'touchstart';
+        const handle  = isMin ? minHandle : maxHandle;
+        handle.classList.add('filter-range__handle--dragging');
+
+        function onMove(ev) {
+          const cx   = isTouch ? ev.touches[0].clientX : ev.clientX;
+          const rect  = rangeWrap.getBoundingClientRect();
+          const pct   = clamp((cx - rect.left) / rect.width, 0, 1);
+          const val   = snap(boundsMin + pct * (boundsMax - boundsMin));
+          if (isMin) curMin = clamp(val, boundsMin, curMax - step);
+          else       curMax = clamp(val, curMin + step, boundsMax);
+          render();
+          scheduleSubmit(1200);
+        }
+
+        function onUp() {
+          handle.classList.remove('filter-range__handle--dragging');
+          document.removeEventListener(isTouch ? 'touchmove' : 'mousemove', onMove);
+          document.removeEventListener(isTouch ? 'touchend'  : 'mouseup',  onUp);
+        }
+
+        document.addEventListener(isTouch ? 'touchmove' : 'mousemove', onMove, { passive: false });
+        document.addEventListener(isTouch ? 'touchend'  : 'mouseup',  onUp);
+      }
+
+      minHandle.addEventListener('mousedown',  e => startDrag(true,  e));
+      maxHandle.addEventListener('mousedown',  e => startDrag(false, e));
+      minHandle.addEventListener('touchstart', e => startDrag(true,  e), { passive: false });
+      maxHandle.addEventListener('touchstart', e => startDrag(false, e), { passive: false });
+
+      rangeWrap.addEventListener('mouseleave', () => scheduleSubmit(800));
+
+      render();
     }
   }
 

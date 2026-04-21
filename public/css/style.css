@@ -320,14 +320,19 @@ img {
 .hero {
   position: relative;
   width: 100%;
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.06) 0%,
-      rgba(0, 0, 0, 0.28) 100%
-    ),
-    linear-gradient(155deg, #bbb8b2 0%, #9e9a94 45%, #888480 100%);
+  background: url("/images/assets/trickohouse-theme.jpg") center/cover no-repeat;
   overflow: hidden;
+}
+
+.hero::after {
+  content: ""; 
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  z-index: 1;
 }
 
 .hero__inner {
@@ -374,25 +379,6 @@ img {
 .hero__brand-tag span {
   font-size: 8px;
   letter-spacing: 0.12em;
-}
-
-/* Decorative silhouette shapes */
-.hero::before,
-.hero::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  width: 200px;
-  height: 290px;
-  background: rgba(160, 155, 148, 0.45);
-  border-radius: 90px 90px 0 0;
-  z-index: 1;
-}
-.hero::before {
-  left: calc(50% - 280px);
-}
-.hero::after {
-  right: calc(50% - 280px);
 }
 
 /* ============================================================

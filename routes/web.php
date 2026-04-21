@@ -16,11 +16,34 @@ Route::get('/', [ProductController::class, 'index'])->name('home');
 
 
 Route::get('/produkty', function () {
-    $activeFilters = request()->only(['price_min', 'price_max', 'colors', 'sizes']);
+    $baseQuery = Product::query();
 
-    $products = Product::with('images')
-                        ->when(request('price_min'), fn($q) => $q->where('price', '>=', request('price_min')))
-                        ->when(request('price_max'), fn($q) => $q->where('price', '<=', request('price_max')))
+    $priceMinBound = (int) floor((float) ((clone $baseQuery)->min('price') ?? 0));
+    $priceMaxBound = (int) ceil((float) ((clone $baseQuery)->max('price') ?? 100));
+
+    if ($priceMinBound > $priceMaxBound) {
+        $priceMinBound = 0;
+        $priceMaxBound = 100;
+    }
+
+    $selectedPriceMin = max($priceMinBound, (int) request('price_min', $priceMinBound));
+    $selectedPriceMax = min($priceMaxBound, (int) request('price_max', $priceMaxBound));
+
+    if ($selectedPriceMin > $selectedPriceMax) {
+        [$selectedPriceMin, $selectedPriceMax] = [$selectedPriceMax, $selectedPriceMin];
+    }
+
+    $activeFilters = array_merge(
+        request()->only(['colors', 'sizes', 'sort']),
+        [
+            'price_min' => $selectedPriceMin,
+            'price_max' => $selectedPriceMax,
+        ]
+    );
+
+    $products = (clone $baseQuery)
+                        ->with('images')
+                        ->whereBetween('price', [$selectedPriceMin, $selectedPriceMax])
                         ->when(request('colors'), fn($q) => $q->whereIn('color', request('colors')))
                         ->when(request('sizes'), fn($q) => $q->whereHas('sizes', fn($q) => $q->whereIn('name', request('sizes'))))
                         ->when(request('sort') == 'price-asc', fn($q) => $q->orderBy('price', 'asc'))
@@ -37,33 +60,95 @@ Route::get('/produkty', function () {
         'selectedCategory' => null,
         'searchQuery'      => null,
         'activeFilters'    => $activeFilters,
+        'priceBounds'      => [
+            'min' => $priceMinBound,
+            'max' => $priceMaxBound,
+        ],
     ]);
 })->name('products.all');
 
 Route::get('/produkty/odporucane', function () {
-    $products = Product::with('images')->where('sale_percent', '>', 0)->paginate(12);
+    $baseQuery = Product::query()->where('sale_percent', '>', 0);
+
+    $priceMinBound = (int) floor((float) ((clone $baseQuery)->min('price') ?? 0));
+    $priceMaxBound = (int) ceil((float) ((clone $baseQuery)->max('price') ?? 100));
+
+    if ($priceMinBound > $priceMaxBound) {
+        $priceMinBound = 0;
+        $priceMaxBound = 100;
+    }
+
+    $selectedPriceMin = max($priceMinBound, (int) request('price_min', $priceMinBound));
+    $selectedPriceMax = min($priceMaxBound, (int) request('price_max', $priceMaxBound));
+
+    if ($selectedPriceMin > $selectedPriceMax) {
+        [$selectedPriceMin, $selectedPriceMax] = [$selectedPriceMax, $selectedPriceMin];
+    }
+
+    $activeFilters = array_merge(
+        request()->only(['colors', 'sizes', 'sort']),
+        [
+            'price_min' => $selectedPriceMin,
+            'price_max' => $selectedPriceMax,
+        ]
+    );
+
+    $products = (clone $baseQuery)
+                    ->with('images')
+                    ->whereBetween('price', [$selectedPriceMin, $selectedPriceMax])
+                    ->when(request('colors'), fn($q) => $q->whereIn('color', request('colors')))
+                    ->when(request('sizes'), fn($q) => $q->whereHas('sizes', fn($q) => $q->whereIn('name', request('sizes'))))
+                    ->when(request('sort') == 'price-asc', fn($q) => $q->orderBy('price', 'asc'))
+                    ->when(request('sort') == 'price-desc', fn($q) => $q->orderBy('price', 'desc'))
+                    ->paginate(12);
 
     return view('products', [
         'products'         => $products,
         'categories'       => Category::all(),
-        'sizes'            => sizes::all(),
+        'sizes'            => Sizes::all(),
         'colors'           => Product::distinct()->pluck('color')->filter(),
         'mode'             => 'featured',
         'pageTitle'        => 'Odporúčané produkty',
         'selectedCategory' => null,
         'searchQuery'      => null,
-        'activeFilters'    => [],
+        'activeFilters'    => $activeFilters,
+        'priceBounds'      => [
+            'min' => $priceMinBound,
+            'max' => $priceMaxBound,
+        ],
     ]);
 })->name('products.featured');
 
 Route::get('/produkty/kategoria/{slug}', function (string $slug) {
     $category = Category::where('name', $slug)->firstOrFail();
-    $activeFilters = request()->only(['price_min', 'price_max', 'colors', 'sizes']);
+    $baseQuery = Product::query()->where('category_id', $category->id);
 
-    $products = Product::with('images')
-                   ->where('category_id', $category->id)
-                   ->when(request('price_min'), fn($q) => $q->where('price', '>=', request('price_min')))
-                   ->when(request('price_max'), fn($q) => $q->where('price', '<=', request('price_max')))
+    $priceMinBound = (int) floor((float) ((clone $baseQuery)->min('price') ?? 0));
+    $priceMaxBound = (int) ceil((float) ((clone $baseQuery)->max('price') ?? 100));
+
+    if ($priceMinBound > $priceMaxBound) {
+        $priceMinBound = 0;
+        $priceMaxBound = 100;
+    }
+
+    $selectedPriceMin = max($priceMinBound, (int) request('price_min', $priceMinBound));
+    $selectedPriceMax = min($priceMaxBound, (int) request('price_max', $priceMaxBound));
+
+    if ($selectedPriceMin > $selectedPriceMax) {
+        [$selectedPriceMin, $selectedPriceMax] = [$selectedPriceMax, $selectedPriceMin];
+    }
+
+    $activeFilters = array_merge(
+        request()->only(['colors', 'sizes', 'sort']),
+        [
+            'price_min' => $selectedPriceMin,
+            'price_max' => $selectedPriceMax,
+        ]
+    );
+
+    $products = (clone $baseQuery)
+                   ->with('images')
+                   ->whereBetween('price', [$selectedPriceMin, $selectedPriceMax])
                    ->when(request('colors'), fn($q) => $q->whereIn('color', request('colors')))
                    ->when(request('sizes'), fn($q) => $q->whereHas('sizes', fn($q) => $q->whereIn('name', request('sizes'))))
                    ->when(request('sort') == 'price-asc', fn($q) => $q->orderBy('price', 'asc'))
@@ -80,25 +165,65 @@ Route::get('/produkty/kategoria/{slug}', function (string $slug) {
         'selectedCategory' => $category,
         'searchQuery'      => null,
         'activeFilters'    => $activeFilters,
+        'priceBounds'      => [
+            'min' => $priceMinBound,
+            'max' => $priceMaxBound,
+        ],
     ]);
 })->name('products.category');
 
 Route::get('/produkty/hladat/{query}', function (string $query) {
-    $products = Product::with('images')
-                       ->where('name', 'ilike', '%' . $query . '%')
-                       ->orWhere('description', 'ilike', '%' . $query . '%')
+    $baseQuery = Product::query()->where(function ($q) use ($query) {
+        $q->where('name', 'ilike', '%' . $query . '%')
+          ->orWhere('description', 'ilike', '%' . $query . '%');
+    });
+
+    $priceMinBound = (int) floor((float) ((clone $baseQuery)->min('price') ?? 0));
+    $priceMaxBound = (int) ceil((float) ((clone $baseQuery)->max('price') ?? 100));
+
+    if ($priceMinBound > $priceMaxBound) {
+        $priceMinBound = 0;
+        $priceMaxBound = 100;
+    }
+
+    $selectedPriceMin = max($priceMinBound, (int) request('price_min', $priceMinBound));
+    $selectedPriceMax = min($priceMaxBound, (int) request('price_max', $priceMaxBound));
+
+    if ($selectedPriceMin > $selectedPriceMax) {
+        [$selectedPriceMin, $selectedPriceMax] = [$selectedPriceMax, $selectedPriceMin];
+    }
+
+    $activeFilters = array_merge(
+        request()->only(['colors', 'sizes', 'sort']),
+        [
+            'price_min' => $selectedPriceMin,
+            'price_max' => $selectedPriceMax,
+        ]
+    );
+
+    $products = (clone $baseQuery)
+                       ->with('images')
+                       ->whereBetween('price', [$selectedPriceMin, $selectedPriceMax])
+                       ->when(request('colors'), fn($q) => $q->whereIn('color', request('colors')))
+                       ->when(request('sizes'), fn($q) => $q->whereHas('sizes', fn($q) => $q->whereIn('name', request('sizes'))))
+                       ->when(request('sort') == 'price-asc', fn($q) => $q->orderBy('price', 'asc'))
+                       ->when(request('sort') == 'price-desc', fn($q) => $q->orderBy('price', 'desc'))
                        ->paginate(12);
 
     return view('products', [
         'products'         => $products,
         'categories'       => Category::all(),
-        'sizes'            => sizes::all(),
+        'sizes'            => Sizes::all(),
         'colors'           => Product::distinct()->pluck('color')->filter(),
         'mode'             => 'search',
         'pageTitle'        => 'Výsledky: ' . $query,
         'selectedCategory' => null,
         'searchQuery'      => $query,
-        'activeFilters'    => [],
+        'activeFilters'    => $activeFilters,
+        'priceBounds'      => [
+            'min' => $priceMinBound,
+            'max' => $priceMaxBound,
+        ],
     ]);
 })->name('products.search');
 
