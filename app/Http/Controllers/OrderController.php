@@ -62,8 +62,14 @@ class OrderController extends Controller
                 'customer_city' => $personalData['city'],
                 'customer_zip' => $personalData['zip'],
                 'customer_country' => $personalData['country'],
-                'billing_same' => $personalData['billingSame'] ?? true,
-                'newsletter' => $personalData['newsletter'] ?? false,
+                'billing_same' => isset($personalData['billingSame']),
+                'newsletter'  => isset($personalData['newsletter']),
+                'billing_first_name' => isset($personalData['billingSame']) ? null : ($personalData['billing_firstName'] ?? null),
+                'billing_last_name'  => isset($personalData['billingSame']) ? null : ($personalData['billing_lastName'] ?? null),
+                'billing_address'    => isset($personalData['billingSame']) ? null : ($personalData['billing_address'] ?? null),
+                'billing_city'       => isset($personalData['billingSame']) ? null : ($personalData['billing_city'] ?? null),
+                'billing_zip'        => isset($personalData['billingSame']) ? null : ($personalData['billing_zip'] ?? null),
+                'billing_country'    => isset($personalData['billingSame']) ? null : ($personalData['billing_country'] ?? null),
             ]);
 
             // Create order items

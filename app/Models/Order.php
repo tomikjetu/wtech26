@@ -28,6 +28,12 @@ class Order extends Model
         'customer_country',
         'billing_same',
         'newsletter',
+        'billing_first_name',
+        'billing_last_name',
+        'billing_address',
+        'billing_city',
+        'billing_zip',
+        'billing_country',
     ];
 
     protected $casts = [

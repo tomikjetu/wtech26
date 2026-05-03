@@ -55,9 +55,14 @@
                     $size = Auth::check() ? $item->size : $item['size'];
                     $qty = Auth::check() ? $item->quantity : $item['quantity'];
                 @endphp
+                @php $img = $product->images->first(); @endphp
                 <div class="order-item">
                   <div class="order-item__image">
-                    <div class="order-item__img order-item__img--shirt-white"></div>
+                    @if ($img)
+                      <img src="{{ asset( $img->path) }}" alt="{{ $product->name }}" class="order-item__img" style="object-fit:cover;">
+                    @else
+                      <div class="order-item__img order-item__img--shirt-white"></div>
+                    @endif
                   </div>
                   <div class="order-item__info">
                     <h3 class="order-item__name">{{ $product->name }}</h3>
@@ -74,15 +79,37 @@
 
         <div class="order-details__grid">
 
+          @php
+            $pd = $checkout_data['personal_data'] ?? [];
+            $billingSame = ($pd['billingSame'] ?? null) === '1';
+            $countryNames = ['SK' => 'Slovensko', 'CZ' => 'Česká republika'];
+          @endphp
+
           <div class="order-details__section">
             <h2 class="order-details__title">Dodacia adresa</h2>
             <div class="address-info">
-              <p>{{ $checkout_data['personal_data']['firstName'] ?? '' }} {{ $checkout_data['personal_data']['lastName'] ?? '' }}</p>
-              <p>{{ $checkout_data['personal_data']['address'] ?? '' }}</p>
-              <p>{{ $checkout_data['personal_data']['city'] ?? '' }} {{ $checkout_data['personal_data']['zip'] ?? '' }}</p>
-              <p>{{ $checkout_data['personal_data']['country'] == 'SK' ? 'Slovensko' : 'Česká republika' }}</p>
-              <p>{{ $checkout_data['personal_data']['email'] ?? '' }}</p>
-              <p>{{ $checkout_data['personal_data']['phone'] ?? '' }}</p>
+              <p><strong>{{ ($pd['firstName'] ?? '') }} {{ ($pd['lastName'] ?? '') }}</strong></p>
+              <p>{{ $pd['address'] ?? '' }}</p>
+              <p>{{ $pd['city'] ?? '' }} {{ $pd['zip'] ?? '' }}</p>
+              <p>{{ $countryNames[$pd['country'] ?? ''] ?? ($pd['country'] ?? '') }}</p>
+              <p>{{ $pd['email'] ?? '' }}</p>
+              @if (!empty($pd['phone']))
+                <p>{{ $pd['phone'] }}</p>
+              @endif
+            </div>
+          </div>
+
+          <div class="order-details__section">
+            <h2 class="order-details__title">Fakturačná adresa</h2>
+            <div class="address-info">
+              @if ($billingSame)
+                <p style="color:var(--muted);font-size:13px;">Rovnaká ako dodacia adresa</p>
+              @else
+                <p><strong>{{ ($pd['billing_firstName'] ?? '') }} {{ ($pd['billing_lastName'] ?? '') }}</strong></p>
+                <p>{{ $pd['billing_address'] ?? '' }}</p>
+                <p>{{ $pd['billing_city'] ?? '' }} {{ $pd['billing_zip'] ?? '' }}</p>
+                <p>{{ $countryNames[$pd['billing_country'] ?? ''] ?? ($pd['billing_country'] ?? '') }}</p>
+              @endif
             </div>
           </div>
 
@@ -90,7 +117,6 @@
             <h2 class="order-details__title">Spôsob dopravy</h2>
             <div class="shipping-info">
               <p><strong>{{ $checkout_data['delivery_title'] ?? 'Nezvolené' }}</strong></p>
-              <p>Doručenie do 3-5 pracovných dní</p>
               <p class="shipping-price">{{ number_format($checkout_data['delivery_price'] ?? 0, 2) }}€</p>
             </div>
           </div>
@@ -99,7 +125,6 @@
             <h2 class="order-details__title">Spôsob platby</h2>
             <div class="payment-info">
               <p><strong>{{ $checkout_data['payment_title'] ?? 'Nezvolené' }}</strong></p>
-              <p>Visa, MasterCard, Maestro</p>
             </div>
           </div>
 

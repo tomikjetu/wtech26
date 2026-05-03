@@ -299,39 +299,66 @@ Route::get('/pokladna/osobne-udaje', function () {
 
 Route::post('/pokladna/osobne-udaje', function (Illuminate\Http\Request $request) {
     $request->validate([
-        'email' => 'required|email:rfc,dns',
-        'phone' => 'nullable|string|regex:/^[0-9+\-\s()]+$/',
-        'firstName' => 'required|string|min:2|max:50',
-        'lastName' => 'required|string|min:2|max:50',
-        'address' => 'required|string|min:5|max:100',
-        'city' => 'required|string|min:2|max:50',
-        'zip' => 'required|string|regex:/^[0-9]{5}$/',
-        'country' => 'required|string|in:SK,CZ',
-        'billingSame' => 'nullable|boolean',
-        'newsletter' => 'nullable|boolean'
+        'email'       => 'required|email:rfc,dns',
+        'phone'       => 'nullable|string|regex:/^[0-9+\-\s()]+$/|max:20',
+        'firstName'   => 'required|string|min:2|max:50',
+        'lastName'    => 'required|string|min:2|max:50',
+        'address'     => 'required|string|min:5|max:100',
+        'city'        => 'required|string|min:2|max:50',
+        'zip'         => 'required|string|regex:/^\d{3}\s?\d{2}$/',
+        'country'     => 'required|string|in:SK,CZ',
+        'billingSame' => 'nullable|in:1',
+        'newsletter'  => 'nullable|in:1',
+
+        // Billing address — only required when billingSame is NOT checked
+        'billing_firstName' => 'required_unless:billingSame,1|nullable|string|min:2|max:50',
+        'billing_lastName'  => 'required_unless:billingSame,1|nullable|string|min:2|max:50',
+        'billing_address'   => 'required_unless:billingSame,1|nullable|string|min:5|max:100',
+        'billing_city'      => 'required_unless:billingSame,1|nullable|string|min:2|max:50',
+        'billing_zip'       => 'required_unless:billingSame,1|nullable|string|regex:/^\d{3}\s?\d{2}$/',
+        'billing_country'   => 'required_unless:billingSame,1|nullable|string|in:SK,CZ',
     ], [
-        'email.required' => 'Email je povinný.',
-        'email.email' => 'Zadajte platnú emailovú adresu.',
-        'phone.regex' => 'Telefónne číslo môže obsahovať iba čísla, +, -, medzery a zátvorky.',
+        'email.required'    => 'Email je povinný.',
+        'email.email'       => 'Zadajte platnú emailovú adresu.',
+        'phone.regex'       => 'Telefónne číslo môže obsahovať iba čísla, +, -, medzery a zátvorky.',
+        'phone.max'         => 'Telefónne číslo môže mať maximálne 20 znakov.',
         'firstName.required' => 'Meno je povinné.',
-        'firstName.min' => 'Meno musí mať aspoň 2 znaky.',
-        'firstName.max' => 'Meno môže mať maximálne 50 znakov.',
+        'firstName.min'     => 'Meno musí mať aspoň 2 znaky.',
+        'firstName.max'     => 'Meno môže mať maximálne 50 znakov.',
         'lastName.required' => 'Priezvisko je povinné.',
-        'lastName.min' => 'Priezvisko musí mať aspoň 2 znaky.',
-        'lastName.max' => 'Priezvisko môže mať maximálne 50 znakov.',
-        'address.required' => 'Adresa je povinná.',
-        'address.min' => 'Adresa musí mať aspoň 5 znakov.',
-        'address.max' => 'Adresa môže mať maximálne 100 znakov.',
-        'city.required' => 'Mesto je povinné.',
-        'city.min' => 'Mesto musí mať aspoň 2 znaky.',
-        'city.max' => 'Mesto môže mať maximálne 50 znakov.',
-        'zip.required' => 'PSČ je povinné.',
-        'zip.regex' => 'PSČ musí byť 5-miestne číslo.',
-        'country.required' => 'Krajina je povinná.',
-        'country.in' => 'Vyberte platnú krajinu (SK alebo CZ).',
+        'lastName.min'      => 'Priezvisko musí mať aspoň 2 znaky.',
+        'lastName.max'      => 'Priezvisko môže mať maximálne 50 znakov.',
+        'address.required'  => 'Adresa je povinná.',
+        'address.min'       => 'Adresa musí mať aspoň 5 znakov.',
+        'address.max'       => 'Adresa môže mať maximálne 100 znakov.',
+        'city.required'     => 'Mesto je povinné.',
+        'city.min'          => 'Mesto musí mať aspoň 2 znaky.',
+        'city.max'          => 'Mesto môže mať maximálne 50 znakov.',
+        'zip.required'      => 'PSČ je povinné.',
+        'zip.regex'         => 'PSČ musí byť vo formáte 12345 alebo 123 45.',
+        'country.required'  => 'Krajina je povinná.',
+        'country.in'        => 'Vyberte platnú krajinu (SK alebo CZ).',
+
+        'billing_firstName.required_unless' => 'Meno (fakturácia) je povinné.',
+        'billing_firstName.min'  => 'Meno (fakturácia) musí mať aspoň 2 znaky.',
+        'billing_lastName.required_unless'  => 'Priezvisko (fakturácia) je povinné.',
+        'billing_lastName.min'   => 'Priezvisko (fakturácia) musí mať aspoň 2 znaky.',
+        'billing_address.required_unless'   => 'Fakturačná adresa je povinná.',
+        'billing_address.min'    => 'Fakturačná adresa musí mať aspoň 5 znakov.',
+        'billing_city.required_unless'      => 'Mesto (fakturácia) je povinné.',
+        'billing_city.min'       => 'Mesto (fakturácia) musí mať aspoň 2 znaky.',
+        'billing_zip.required_unless'       => 'PSČ (fakturácia) je povinné.',
+        'billing_zip.regex'      => 'PSČ (fakturácia) musí byť vo formáte 12345 alebo 123 45.',
+        'billing_country.required_unless'   => 'Krajina (fakturácia) je povinná.',
+        'billing_country.in'     => 'Vyberte platnú krajinu (SK alebo CZ) pre fakturáciu.',
     ]);
 
-    session(['checkout.personal_data' => $request->all()]);
+    session(['checkout.personal_data' => $request->only([
+        'email', 'phone', 'firstName', 'lastName', 'address', 'city', 'zip', 'country',
+        'billingSame', 'newsletter',
+        'billing_firstName', 'billing_lastName', 'billing_address',
+        'billing_city', 'billing_zip', 'billing_country',
+    ])]);
 
     return redirect()->route('checkout.summary');
 })->name('checkout.personal.post');
@@ -342,13 +369,13 @@ Route::get('/pokladna/suhrn', function () {
     
     // Get cart items
     if (Auth::check()) {
-        $items = App\Models\CartItem::with(['product', 'size'])
+        $items = App\Models\CartItem::with(['product.images', 'size'])
                                  ->where('user_id', Auth::id())
                                  ->get();
     } else {
         $cart = session()->get('cart', []);
         $items = collect($cart)->map(function ($item) {
-            $item['product'] = App\Models\Product::find($item['product_id']);
+            $item['product'] = App\Models\Product::with('images')->find($item['product_id']);
             $item['size'] = App\Models\sizes::find($item['size_id']);
             return $item;
         });
