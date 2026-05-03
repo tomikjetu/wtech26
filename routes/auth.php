@@ -54,6 +54,10 @@ Route::middleware('guest')->group(function () {
         ]);
 
         Auth::login($user);
+        
+        // Transfer session cart to user
+        \App\Http\Controllers\CartController::transferSessionCartToUser($user->id);
+        
         $token = bin2hex(random_bytes(32));
 
         return redirect('/profil')->cookie('auth_token', $token, 60*24*30);
