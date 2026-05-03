@@ -311,8 +311,8 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 16px 20px;
-  border-bottom: 1px solid #f8f8f8;
+  padding: 14px 20px;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .order-item:last-child {
@@ -320,88 +320,103 @@
 }
 
 .item-image {
-  width: 60px;
-  height: 60px;
+  width: 64px;
+  aspect-ratio: 1 / 1;
   border-radius: 6px;
-  background: #f5f5f5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: #efefef;
+}
+
+.item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .item-placeholder {
-  width: 40px;
-  height: 40px;
-  background: #ddd;
-  border-radius: 4px;
+  width: 100%;
+  height: 100%;
+  background: #e0e0e0;
 }
 
 .item-details {
   flex: 1;
+  min-width: 0;
 }
 
 .item-name {
-  margin: 0 0 4px 0;
-  font-size: 16px;
-  font-weight: 600;
+  margin: 0 0 3px 0;
+  font-size: 15px;
+  font-weight: 700;
   color: #1a1a1a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .item-variant {
-  margin: 0 0 4px 0;
-  font-size: 14px;
-  color: #666;
+  margin: 0 0 2px 0;
+  font-size: 13px;
+  color: #888;
 }
 
 .item-quantity {
   margin: 0;
-  font-size: 14px;
-  color: #666;
+  font-size: 13px;
+  color: #888;
 }
 
 .item-price {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
   color: #1a1a1a;
+  white-space: nowrap;
 }
 
 .order-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding: 20px;
+  padding: 16px 20px;
   background: #fafafa;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid #efefef;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .order-summary {
-  flex: 1;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: baseline;
 }
 
 .summary-row {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  font-size: 14px;
+  gap: 5px;
+  font-size: 13px;
+  color: #777;
+  white-space: nowrap;
 }
 
-.summary-row:last-child {
-  margin-bottom: 0;
+.summary-row span:last-child {
+  font-weight: 600;
+  color: #1a1a1a;
 }
 
 .summary-total {
+  font-size: 14px;
   font-weight: 700;
-  font-size: 16px;
   color: #1a1a1a;
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid #e6e6e6;
+}
+
+.summary-total span:last-child {
+  font-size: 15px;
 }
 
 .order-actions {
   display: flex;
-  gap: 12px;
-  margin-left: 20px;
+  gap: 10px;
 }
 
 .btn--small {
@@ -444,20 +459,17 @@
     text-align: left;
   }
 
-  .order-item {
+  .order-footer {
     flex-direction: column;
+    gap: 14px;
     align-items: flex-start;
+  }
+
+  .order-summary {
     gap: 12px;
   }
 
-  .order-footer {
-    flex-direction: column;
-    gap: 16px;
-    align-items: flex-start;
-  }
-
   .order-actions {
-    margin-left: 0;
     width: 100%;
   }
 
@@ -467,6 +479,24 @@
 }
 
 /* ===== ORDER DETAIL STYLES ===== */
+
+/* override profile card summary-row for the detail page summary box */
+.order-summary-box .summary-row {
+  justify-content: space-between;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.order-summary-box .summary-row:last-child {
+  margin-bottom: 0;
+}
+
+.order-summary-box .summary-total {
+  border-top: 1px solid #e6e6e6;
+  padding-top: 10px;
+  margin-top: 4px;
+}
 
 .order-detail-header {
   margin-bottom: 24px;
@@ -487,7 +517,7 @@
 
 .order-detail-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 24px;
   margin-bottom: 32px;
 }
@@ -526,20 +556,24 @@
 
 .item-image-large {
   width: 80px;
-  height: 80px;
+  aspect-ratio: 1 / 1;
   border-radius: 8px;
-  background: #f5f5f5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
+  background: #efefef;
   flex-shrink: 0;
 }
 
+.item-image-large img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .item-placeholder-large {
-  width: 60px;
-  height: 60px;
-  background: #ddd;
-  border-radius: 6px;
+  width: 100%;
+  height: 100%;
+  background: #e0e0e0;
 }
 
 .item-info-detailed {

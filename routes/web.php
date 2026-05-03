@@ -411,7 +411,7 @@ Route::get('/registracia', function () {
 })->name('register');
 
 Route::middleware('auth')->get('/profil', function () {
-    $orders = App\Models\Order::with('items')
+    $orders = App\Models\Order::with('items.product.images')
         ->where('user_id', auth()->id())
         ->orderBy('created_at', 'desc')
         ->get();
@@ -419,7 +419,7 @@ Route::middleware('auth')->get('/profil', function () {
 })->name('profile');
 
 Route::middleware('auth')->get('/profil/objednavka/{id}', function ($id) {
-    $order = App\Models\Order::with('items')
+    $order = App\Models\Order::with('items.product.images')
         ->where('user_id', auth()->id())
         ->where('id', $id)
         ->firstOrFail();

@@ -106,7 +106,12 @@
               @foreach($order->items as $item)
               <div class="order-item-detailed">
                 <div class="item-image-large">
-                  <div class="item-placeholder-large"></div>
+                  @php $img = $item->product?->images->first(); @endphp
+                  @if ($img)
+                    <img src="{{ asset($img->path) }}" alt="{{ $item->product_name }}">
+                  @else
+                    <div class="item-placeholder-large"></div>
+                  @endif
                 </div>
                 <div class="item-info-detailed">
                   <h3 class="item-name-detailed">{{ $item->product_name }}</h3>

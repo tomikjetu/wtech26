@@ -116,7 +116,12 @@
                 @foreach($order->items as $item)
                 <div class="order-item">
                   <div class="item-image">
-                    <div class="item-placeholder"></div>
+                    @php $img = $item->product?->images->first(); @endphp
+                    @if ($img)
+                      <img src="{{ asset($img->path) }}" alt="{{ $item->product_name }}">
+                    @else
+                      <div class="item-placeholder"></div>
+                    @endif
                   </div>
                   <div class="item-details">
                     <h4 class="item-name">{{ $item->product_name }}</h4>
@@ -142,7 +147,7 @@
                     <span>{{ number_format($order->subtotal, 2) }}€</span>
                   </div>
                   <div class="summary-row">
-                    <span>Doprava ({{ $order->delivery_title }}):</span>
+                    <span>Doprava:</span>
                     <span>{{ number_format($order->delivery_price, 2) }}€</span>
                   </div>
                   <div class="summary-row summary-total">
