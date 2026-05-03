@@ -19,7 +19,7 @@
       <div class="container hero__inner">
         <div class="hero__content">
           <h1 class="hero__title">KÚP SI NAŠE PREKLIATE TRIČKO</h1>
-          <a href="#" class="btn btn--teal">IDEM DO TOHO</a>
+          <a href="/produkty" class="btn btn--teal">IDEM DO TOHO</a>
         </div>
         <div class="hero__brand-tag">Trickohouse</div>
       </div>

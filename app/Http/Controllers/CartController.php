@@ -66,13 +66,13 @@ class CartController extends Controller
     public function index()
     {
         if (Auth::check()) {
-            $items = CartItem::with(['product', 'size'])
+            $items = CartItem::with(['product.images', 'size'])
                              ->where('user_id', Auth::id())
                              ->get();
         } else {
             $cart  = session()->get('cart', []);
             $items = collect($cart)->map(function ($item) {
-                $item['product'] = Product::find($item['product_id']);
+                $item['product'] = Product::with('images')->find($item['product_id']);
                 $item['size']    = \App\Models\sizes::find($item['size_id']);
                 return $item;
             });

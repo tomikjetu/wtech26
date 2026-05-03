@@ -60,11 +60,16 @@
             $itemId  = Auth::check() ? $item->id : null;
         @endphp
         <div class="cart-item">
-            <div class="cart-item__image">
-                <div class="cart-item__img cart-item__img--shirt-white"></div>
-            </div>
+            <a href="{{ route('product.detail', $product->id) }}" class="cart-item__image">
+                @php $img = $product->images->first(); @endphp
+                @if ($img)
+                    <img src="{{ asset($img->path) }}" alt="{{ $product->name }}" class="cart-item__img">
+                @else
+                    <div class="cart-item__img cart-item__img--shirt-white"></div>
+                @endif
+            </a>
             <div class="cart-item__info">
-                <h3 class="cart-item__name">{{ $product->name }}</h3>
+                <h3 class="cart-item__name"><a href="{{ route('product.detail', $product->id) }}" style="color:inherit;text-decoration:none;">{{ $product->name }}</a></h3>
                 <p class="cart-item__variant">{{ $product->color }}, {{ $size?->name ?? 'N/A' }}</p>
                 <form method="POST" action="{{ route('cart.update') }}">
                     @csrf
@@ -173,5 +178,14 @@
   </footer>
 
   <script src="{{ asset('js/nav.js') }}" defer></script>
+  <script>
+    function changeCartQty(btn, delta) {
+      const form = btn.closest('form');
+      const input = form.querySelector('input[name="quantity"]');
+      const newVal = Math.max(1, parseInt(input.value) + delta);
+      input.value = newVal;
+      form.submit();
+    }
+  </script>
 </body>
 </html>
